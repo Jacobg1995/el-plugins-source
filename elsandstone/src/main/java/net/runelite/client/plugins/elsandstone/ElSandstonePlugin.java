@@ -26,27 +26,29 @@
 package net.runelite.client.plugins.elsandstone;
 
 import com.google.inject.Provides;
-import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
-import java.time.Instant;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.events.ConfigButtonClicked;
+import net.runelite.api.events.GameObjectDespawned;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
-import net.runelite.api.events.GameObjectDespawned;
-import net.runelite.api.events.ConfigButtonClicked;
 import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
 import net.runelite.client.plugins.elutils.ElUtils;
+import net.runelite.client.plugins.elutils.LegacyMenuEntry;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
+
+import javax.inject.Inject;
+import java.time.Instant;
 
 import static net.runelite.client.plugins.elsandstone.ElSandstoneState.*;
 
@@ -84,7 +86,7 @@ public class ElSandstonePlugin extends Plugin
 
 	ElSandstoneState state;
 	GameObject targetObject;
-	MenuEntry targetMenu;
+	LegacyMenuEntry targetMenu;
 	WorldPoint skillLocation;
 	Instant botTimer;
 	LocalPoint beforeLoc;
@@ -326,7 +328,7 @@ public class ElSandstonePlugin extends Plugin
 		}
 		if (targetObject != null)
 		{
-			targetMenu = new MenuEntry("", "", targetObject.getId(), MenuAction.GAME_OBJECT_FIRST_OPTION.getId(),
+			targetMenu = new LegacyMenuEntry("", "", targetObject.getId(), MenuAction.GAME_OBJECT_FIRST_OPTION.getId(),
 					targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
@@ -354,7 +356,7 @@ public class ElSandstonePlugin extends Plugin
 		targetObject = utils.getGameObjects(grinderId).get(0);
 		if (targetObject != null)
 		{
-			targetMenu = new MenuEntry("", "", targetObject.getId(), MenuAction.GAME_OBJECT_FIRST_OPTION.getId(),
+			targetMenu = new LegacyMenuEntry("", "", targetObject.getId(), MenuAction.GAME_OBJECT_FIRST_OPTION.getId(),
 					targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
@@ -384,7 +386,7 @@ public class ElSandstonePlugin extends Plugin
 			utils.sendGameMessage("out of astrals runes");
 			startSandstoneMiner = false;
 		}
-		targetMenu = new MenuEntry("Cast","<col=00ff00>Humidify</col>",1,57,-1,14286954,false);
+		targetMenu = new LegacyMenuEntry("Cast","<col=00ff00>Humidify</col>",1,57,-1,14286955,false);
 		Widget spellWidget = utils.getSpellWidget("Humidify");
 		if(spellWidget==null){
 			utils.sendGameMessage("unable to find humidify widget");

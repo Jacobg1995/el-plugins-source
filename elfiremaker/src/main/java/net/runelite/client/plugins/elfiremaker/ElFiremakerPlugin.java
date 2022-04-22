@@ -1,10 +1,9 @@
 package net.runelite.client.plugins.elfiremaker;
 
 import com.google.inject.Provides;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.*;
 import net.runelite.api.Point;
+import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
@@ -19,17 +18,16 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.elutils.ElUtils;
-import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
+import net.runelite.client.plugins.elutils.LegacyMenuEntry;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
 
+import javax.inject.Inject;
 import java.awt.*;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 import static net.runelite.client.plugins.elfiremaker.ElFiremakerState.*;
 
 @Extension
@@ -63,7 +61,7 @@ public class ElFiremakerPlugin extends Plugin
 	@Inject
 	private ElFiremakerOverlay overlay;
 
-	MenuEntry targetMenu;
+	LegacyMenuEntry targetMenu;
 	Instant botTimer;
 	Player player;
 	boolean firstTime;
@@ -261,14 +259,14 @@ public class ElFiremakerPlugin extends Plugin
 		}
 		if(!utils.isBankOpen()){
 			if(firstTime){
-				targetMenu=new MenuEntry("Use","<col=ff9040>Tinderbox",590,38,utils.getInventoryWidgetItem(590).getIndex(),9764864,false);
+				targetMenu=new LegacyMenuEntry("Use","<col=ff9040>Tinderbox",590,38,utils.getInventoryWidgetItem(590).getIndex(),9764864,false);
 				utils.setMenuEntry(targetMenu);
 				utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 				firstTime=false;
 				state=LIGHT_FIRST;
 				return;
 			}
-			targetMenu = new MenuEntry("Use","<col=ff9040>Tinderbox<col=ffffff> -> <col=ff9040>"+itemManager.getItemComposition(config.logId()).getName(),config.logId(),31,utils.getInventoryWidgetItem(config.logId()).getIndex(),9764864,false);
+			targetMenu = new LegacyMenuEntry("Use","<col=ff9040>Tinderbox<col=ffffff> -> <col=ff9040>"+itemManager.getItemComposition(config.logId()).getName(),config.logId(),31,utils.getInventoryWidgetItem(config.logId()).getIndex(),9764864,false);
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 			timeout = tickDelay();
@@ -297,7 +295,7 @@ public class ElFiremakerPlugin extends Plugin
 				.result(client)
 				.nearestTo(client.getLocalPlayer());
 		if(targetObject!=null){
-			targetMenu = new MenuEntry("","",targetObject.getId(),4,targetObject.getLocalLocation().getSceneX(),targetObject.getLocalLocation().getSceneY(),false);
+			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),4,targetObject.getLocalLocation().getSceneX(),targetObject.getLocalLocation().getSceneY(),false);
 			utils.sendGameMessage(targetMenu.toString());
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
@@ -318,14 +316,14 @@ public class ElFiremakerPlugin extends Plugin
 
 	private void closeBank()
 	{
-		targetMenu = new MenuEntry("Close", "", 1, 57, 11, 786434, false);
+		targetMenu = new LegacyMenuEntry("Close", "", 1, 57, 11, 786434, false);
 		utils.setMenuEntry(targetMenu);
 		utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 	}
 
 	private void getToVarrockSquare(){
 		if(!config.walk()){
-			targetMenu=new MenuEntry("Cast","<col=00ff00>Varrock Teleport</col>",1,57,-1,14286868,false);
+			targetMenu=new LegacyMenuEntry("Cast","<col=00ff00>Varrock Teleport</col>",1,57,-1,14286869,false);
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 		} else {

@@ -26,17 +26,16 @@
 package net.runelite.client.plugins.elcooker;
 
 import com.google.inject.Provides;
-import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
-import java.awt.Rectangle;
-import java.time.Instant;
-import java.util.*;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Point;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.events.*;
+import net.runelite.api.events.ConfigButtonClicked;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -44,9 +43,18 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginManager;
+import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
 import net.runelite.client.plugins.elutils.ElUtils;
+import net.runelite.client.plugins.elutils.LegacyMenuEntry;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
+
+import javax.inject.Inject;
+import java.awt.*;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static net.runelite.client.plugins.elcooker.ElCookerState.*;
 
@@ -90,7 +98,7 @@ public class ElCookerPlugin extends Plugin
 	ElCookerState state;
 	GameObject targetObject;
 	NPC targetNpc;
-	MenuEntry targetMenu;
+	LegacyMenuEntry targetMenu;
 	WorldPoint skillLocation;
 	Instant botTimer;
 	LocalPoint beforeLoc;
@@ -217,7 +225,7 @@ public class ElCookerPlugin extends Plugin
 	{
 		targetObject = utils.findNearestGameObjectWithin(client.getLocalPlayer().getWorldLocation(),25,config.rangeObjectId());
 		if(targetObject!=null){
-			targetMenu = new MenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 			if(config.seaweedMode()){
 				utils.setModifiedMenuEntry(targetMenu,21504,utils.getInventoryWidgetItem(21504).getIndex(),1);
 			} else {
@@ -235,9 +243,9 @@ public class ElCookerPlugin extends Plugin
 
 	private void interactFire()
 	{
-		targetObject = utils.findNearestGameObjectWithin(player.getWorldLocation(),25,26185);
+		targetObject = utils.findNearestGameObjectWithin(player.getWorldLocation(),25,43475);
 		if(targetObject!=null){
-			targetMenu = new MenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 			if(config.seaweedMode()){
 				utils.setModifiedMenuEntry(targetMenu,21504,utils.getInventoryWidgetItem(21504).getIndex(),1);
 			} else {
@@ -256,7 +264,7 @@ public class ElCookerPlugin extends Plugin
 		targetObject = utils.findNearestGameObjectWithin(player.getWorldLocation(),25,config.bankObjectId());
 		if (targetObject != null)
 		{
-			targetMenu = new MenuEntry("", "", targetObject.getId(), config.bankOpCode(),
+			targetMenu = new LegacyMenuEntry("", "", targetObject.getId(), config.bankOpCode(),
 					targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
@@ -271,7 +279,7 @@ public class ElCookerPlugin extends Plugin
 	{
 		targetNpc = utils.findNearestNpcWithin(player.getWorldLocation(),5, Collections.singleton(3194));
 		if(targetNpc!=null){
-			targetMenu = new MenuEntry("Bank", "<col=ffff00>Emerald Benedict", targetNpc.getIndex(), 11,
+			targetMenu = new LegacyMenuEntry("Bank", "<col=ffff00>Emerald Benedict", targetNpc.getIndex(), 11,
 					0, 0, false);
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(targetNpc.getConvexHull().getBounds(), sleepDelay());
@@ -452,7 +460,7 @@ public class ElCookerPlugin extends Plugin
 			if(client.getWidget(270,15)!=null){
 				if(client.getWidget(270,15).getName().equals("<col=ff9040>Cooked karambwan</col>")){
 					timeout=3;
-					targetMenu=new MenuEntry("","",1,57,-1,17694735,false);
+					targetMenu=new LegacyMenuEntry("","",1,57,-1,17694735,false);
 					utils.setMenuEntry(targetMenu);
 					if(client.getWidget(270,15).getBounds()!=null){
 						utils.delayMouseClick(client.getWidget(270,15).getBounds(), sleepDelay());
@@ -464,7 +472,7 @@ public class ElCookerPlugin extends Plugin
 			if(client.getWidget(270,5)!=null){
 				if(client.getWidget(270,5).getText().equals("How many would you like to cook?")){
 					timeout=3;
-					targetMenu=new MenuEntry("","",1,57,-1,17694734,false);
+					targetMenu=new LegacyMenuEntry("","",1,57,-1,17694734,false);
 					utils.setMenuEntry(targetMenu);
 					if(client.getWidget(270,5).getBounds()!=null){
 						utils.delayMouseClick(client.getWidget(270,5).getBounds(), sleepDelay());
@@ -479,7 +487,7 @@ public class ElCookerPlugin extends Plugin
 			if(client.getWidget(270,5)!=null){
 				if(client.getWidget(270,5).getText().equals("How many would you like to cook?")){
 					timeout=3;
-					targetMenu=new MenuEntry("","",1,57,-1,17694734,false);
+					targetMenu=new LegacyMenuEntry("","",1,57,-1,17694734,false);
 					utils.setMenuEntry(targetMenu);
 					if(client.getWidget(270,5).getBounds()!=null){
 						utils.delayMouseClick(client.getWidget(270,5).getBounds(), sleepDelay());
@@ -509,7 +517,7 @@ public class ElCookerPlugin extends Plugin
 			utils.withdrawItemAmount(ID,4);
 			timeout+=3;
 		} else {
-			targetMenu = new MenuEntry("", "", (client.getVarbitValue(6590) == 3) ? 1 : 5, MenuAction.CC_OP.getId(), utils.getBankItemWidget(ID).getIndex(), 786444, false);
+			targetMenu = new LegacyMenuEntry("", "", (client.getVarbitValue(6590) == 3) ? 1 : 5, MenuAction.CC_OP.getId(), utils.getBankItemWidget(ID).getIndex(), 786444, false);
 			utils.setMenuEntry(targetMenu);
 			clickBounds = utils.getBankItemWidget(ID).getBounds()!=null ? utils.getBankItemWidget(ID).getBounds() : new Rectangle(client.getCenterX() - 50, client.getCenterY() - 50, 100, 100);
 			utils.delayMouseClick(clickBounds,sleepDelay());

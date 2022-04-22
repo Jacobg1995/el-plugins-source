@@ -29,8 +29,6 @@ import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.http.api.ge.GrandExchangeClient;
-import net.runelite.http.api.osbuddy.OSBGrandExchangeClient;
-import net.runelite.http.api.osbuddy.OSBGrandExchangeResult;
 import net.runelite.rs.api.RSClient;
 import okhttp3.*;
 import org.pf4j.Extension;
@@ -57,9 +55,9 @@ import static net.runelite.client.plugins.elutils.Banks.ALL_BANKS;
  */
 @Extension
 @PluginDescriptor(
-	name = "ElUtils",
-	description = "El bot utilities",
-	hidden = false
+		name = "ElUtils",
+		description = "El bot utilities",
+		hidden = false
 )
 @Slf4j
 @SuppressWarnings("unused")
@@ -79,9 +77,6 @@ public class ElUtils extends Plugin
 	private GrandExchangeClient grandExchangeClient;
 
 	@Inject
-	private OSBGrandExchangeClient osbGrandExchangeClient;
-
-	@Inject
 	private ClientThread clientThread;
 
 	@Inject
@@ -90,8 +85,7 @@ public class ElUtils extends Plugin
 	@Inject
 	ExecutorService executorService;
 
-	MenuEntry targetMenu;
-	private OSBGrandExchangeResult osbGrandExchangeResult;
+	LegacyMenuEntry targetMenu;
 	public WorldPoint nextPoint;
 	public List<WorldPoint> currentPath = new LinkedList<WorldPoint>();
 
@@ -123,12 +117,6 @@ public class ElUtils extends Plugin
 	}
 
 	@Provides
-	OSBGrandExchangeClient provideOsbGrandExchangeClient(OkHttpClient okHttpClient)
-	{
-		return new OSBGrandExchangeClient(okHttpClient);
-	}
-
-	@Provides
 	GrandExchangeClient provideGrandExchangeClient(OkHttpClient okHttpClient)
 	{
 		return new GrandExchangeClient(okHttpClient);
@@ -149,15 +137,15 @@ public class ElUtils extends Plugin
 	public void sendGameMessage(String message)
 	{
 		String chatMessage = new ChatMessageBuilder()
-			.append(ChatColorType.HIGHLIGHT)
-			.append(message)
-			.build();
+				.append(ChatColorType.HIGHLIGHT)
+				.append(message)
+				.build();
 
 		chatMessageManager
-			.queue(QueuedMessage.builder()
-				.type(ChatMessageType.CONSOLE)
-				.runeLiteFormattedMessage(chatMessage)
-				.build());
+				.queue(QueuedMessage.builder()
+						.type(ChatMessageType.CONSOLE)
+						.runeLiteFormattedMessage(chatMessage)
+						.build());
 	}
 
 	//Ganom's
@@ -170,7 +158,7 @@ public class ElUtils extends Plugin
 	public List<Integer> stringToIntList(String string)
 	{
 		return (string == null || string.trim().equals("")) ? List.of(0) :
-			Arrays.stream(string.split(",")).map(String::trim).map(Integer::parseInt).collect(Collectors.toList());
+				Arrays.stream(string.split(",")).map(String::trim).map(Integer::parseInt).collect(Collectors.toList());
 	}
 
 	@Nullable
@@ -184,9 +172,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new GameObjectQuery()
-			.idEquals(ids)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.idEquals(ids)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	@Nullable
@@ -200,10 +188,10 @@ public class ElUtils extends Plugin
 		}
 
 		return new GameObjectQuery()
-			.isWithinDistance(worldPoint, dist)
-			.idEquals(ids)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.isWithinDistance(worldPoint, dist)
+				.idEquals(ids)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	@Nullable
@@ -217,10 +205,10 @@ public class ElUtils extends Plugin
 		}
 
 		return new GameObjectQuery()
-			.isWithinDistance(worldPoint, dist)
-			.idEquals(ids)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.isWithinDistance(worldPoint, dist)
+				.idEquals(ids)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	@Nullable
@@ -234,9 +222,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new NPCQuery()
-			.idEquals(ids)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.idEquals(ids)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	@Nullable
@@ -250,9 +238,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new NPCQuery()
-			.nameContains(names)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.nameContains(names)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	@Nullable
@@ -266,10 +254,10 @@ public class ElUtils extends Plugin
 		}
 
 		return new NPCQuery()
-			.isWithinDistance(worldPoint, dist)
-			.idEquals(ids)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.isWithinDistance(worldPoint, dist)
+				.idEquals(ids)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	@Nullable
@@ -285,18 +273,18 @@ public class ElUtils extends Plugin
 		if (exactnpcname)
 		{
 			return new NPCQuery()
-				.isWithinDistance(worldPoint, dist)
-				.filter(npc -> npc.getName() != null && npc.getName().equalsIgnoreCase(name) && npc.getInteracting() == null && npc.getHealthRatio() != 0)
-				.result(client)
-				.nearestTo(client.getLocalPlayer());
+					.isWithinDistance(worldPoint, dist)
+					.filter(npc -> npc.getName() != null && npc.getName().equalsIgnoreCase(name) && npc.getInteracting() == null && npc.getHealthRatio() != 0)
+					.result(client)
+					.nearestTo(client.getLocalPlayer());
 		}
 		else
 		{
 			return new NPCQuery()
-				.isWithinDistance(worldPoint, dist)
-				.filter(npc -> npc.getName() != null && npc.getName().toLowerCase().contains(name.toLowerCase()) && npc.getInteracting() == null && npc.getHealthRatio() != 0)
-				.result(client)
-				.nearestTo(client.getLocalPlayer());
+					.isWithinDistance(worldPoint, dist)
+					.filter(npc -> npc.getName() != null && npc.getName().toLowerCase().contains(name.toLowerCase()) && npc.getInteracting() == null && npc.getHealthRatio() != 0)
+					.result(client)
+					.nearestTo(client.getLocalPlayer());
 		}
 	}
 
@@ -313,16 +301,16 @@ public class ElUtils extends Plugin
 		if (exactnpcname)
 		{
 			return new NPCQuery()
-				.filter(npc -> npc.getName() != null && npc.getName().equalsIgnoreCase(name) && npc.getInteracting() == client.getLocalPlayer() && npc.getHealthRatio() != 0)
-				.result(client)
-				.nearestTo(client.getLocalPlayer());
+					.filter(npc -> npc.getName() != null && npc.getName().equalsIgnoreCase(name) && npc.getInteracting() == client.getLocalPlayer() && npc.getHealthRatio() != 0)
+					.result(client)
+					.nearestTo(client.getLocalPlayer());
 		}
 		else
 		{
 			return new NPCQuery()
-				.filter(npc -> npc.getName() != null && npc.getName().toLowerCase().contains(name.toLowerCase()) && npc.getInteracting() == client.getLocalPlayer() && npc.getHealthRatio() != 0)
-				.result(client)
-				.nearestTo(client.getLocalPlayer());
+					.filter(npc -> npc.getName() != null && npc.getName().toLowerCase().contains(name.toLowerCase()) && npc.getInteracting() == client.getLocalPlayer() && npc.getHealthRatio() != 0)
+					.result(client)
+					.nearestTo(client.getLocalPlayer());
 		}
 
 	}
@@ -338,9 +326,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new WallObjectQuery()
-			.idEquals(ids)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.idEquals(ids)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	@Nullable
@@ -354,10 +342,10 @@ public class ElUtils extends Plugin
 		}
 
 		return new WallObjectQuery()
-			.isWithinDistance(worldPoint, radius)
-			.idEquals(ids)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.isWithinDistance(worldPoint, radius)
+				.idEquals(ids)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	@Nullable
@@ -371,10 +359,10 @@ public class ElUtils extends Plugin
 		}
 
 		return new WallObjectQuery()
-			.isWithinDistance(worldPoint, radius)
-			.idEquals(ids)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.isWithinDistance(worldPoint, radius)
+				.idEquals(ids)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	@Nullable
@@ -388,9 +376,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new DecorativeObjectQuery()
-			.idEquals(ids)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.idEquals(ids)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	@Nullable
@@ -404,9 +392,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new GroundObjectQuery()
-			.idEquals(ids)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.idEquals(ids)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	public List<GameObject> getGameObjects(int... ids)
@@ -419,9 +407,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new GameObjectQuery()
-			.idEquals(ids)
-			.result(client)
-			.list;
+				.idEquals(ids)
+				.result(client)
+				.list;
 	}
 
 	public List<GameObject> getLocalGameObjects(int distanceAway, int... ids)
@@ -451,9 +439,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new NPCQuery()
-			.idEquals(ids)
-			.result(client)
-			.list;
+				.idEquals(ids)
+				.result(client)
+				.list;
 	}
 
 	public List<NPC> getNPCs(String... names)
@@ -466,9 +454,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new NPCQuery()
-			.nameContains(names)
-			.result(client)
-			.list;
+				.nameContains(names)
+				.result(client)
+				.list;
 	}
 
 	public NPC getFirstNPCWithLocalTarget()
@@ -496,9 +484,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new WallObjectQuery()
-			.idEquals(ids)
-			.result(client)
-			.list;
+				.idEquals(ids)
+				.result(client)
+				.list;
 	}
 
 	public List<DecorativeObject> getDecorObjects(int... ids)
@@ -511,9 +499,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new DecorativeObjectQuery()
-			.idEquals(ids)
-			.result(client)
-			.list;
+				.idEquals(ids)
+				.result(client)
+				.list;
 	}
 
 	public List<GroundObject> getGroundObjects(int... ids)
@@ -526,9 +514,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new GroundObjectQuery()
-			.idEquals(ids)
-			.result(client)
-			.list;
+				.idEquals(ids)
+				.result(client)
+				.list;
 	}
 
 	@Nullable
@@ -568,9 +556,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new GameObjectQuery()
-			.idEquals(ALL_BANKS)
-			.result(client)
-			.nearestTo(client.getLocalPlayer());
+				.idEquals(ALL_BANKS)
+				.result(client)
+				.nearestTo(client.getLocalPlayer());
 	}
 
 	/*
@@ -583,14 +571,17 @@ public class ElUtils extends Plugin
 		assert client.isClientThread();
 
 		List<Item> equipped = new ArrayList<>();
-		Item[] items = client.getItemContainer(InventoryID.EQUIPMENT).getItems();
-		for (Item item : items)
-		{
-			if (item.getId() == -1 || item.getId() == 0)
+		if(client.getItemContainer(InventoryID.EQUIPMENT)!=null){
+			Item[] items = client.getItemContainer(InventoryID.EQUIPMENT).getItems();
+			for (Item item : items)
 			{
-				continue;
+				if (item.getId() == -1 || item.getId() == 0)
+				{
+					continue;
+				}
+				equipped.add(item);
 			}
-			equipped.add(item);
+
 		}
 		return equipped;
 	}
@@ -603,13 +594,14 @@ public class ElUtils extends Plugin
 	public boolean isItemEquipped(Collection<Integer> itemIds)
 	{
 		assert client.isClientThread();
-
-		Item[] items = client.getItemContainer(InventoryID.EQUIPMENT).getItems();
-		for (Item item : items)
-		{
-			if (itemIds.contains(item.getId()))
+		if(client.getItemContainer(InventoryID.EQUIPMENT)!=null){
+			Item[] items = client.getItemContainer(InventoryID.EQUIPMENT).getItems();
+			for (Item item : items)
 			{
-				return true;
+				if (itemIds.contains(item.getId()))
+				{
+					return true;
+				}
 			}
 		}
 		return false;
@@ -672,7 +664,7 @@ public class ElUtils extends Plugin
 	{
 		int x = check.getX(), y = check.getY();
 		return x > client.getViewportXOffset() && x < client.getViewportWidth()
-			&& y > client.getViewportYOffset() && y < client.getViewportHeight();
+				&& y > client.getViewportYOffset() && y < client.getViewportHeight();
 	}
 
 	/**
@@ -708,8 +700,8 @@ public class ElUtils extends Plugin
 	private void keyEvent(int id, char key)
 	{
 		KeyEvent e = new KeyEvent(
-			client.getCanvas(), id, System.currentTimeMillis(),
-			0, KeyEvent.VK_UNDEFINED, key
+				client.getCanvas(), id, System.currentTimeMillis(),
+				0, KeyEvent.VK_UNDEFINED, key
 		);
 
 		client.getCanvas().dispatchEvent(e);
@@ -718,8 +710,8 @@ public class ElUtils extends Plugin
 	private void keyEvent(int id, int key)
 	{
 		KeyEvent e = new KeyEvent(
-			client.getCanvas(), id, System.currentTimeMillis(),
-			0, key, KeyEvent.CHAR_UNDEFINED
+				client.getCanvas(), id, System.currentTimeMillis(),
+				0, key, KeyEvent.CHAR_UNDEFINED
 		);
 		client.getCanvas().dispatchEvent(e);
 	}
@@ -836,10 +828,10 @@ public class ElUtils extends Plugin
 	private void mouseEvent(int id, Point point)
 	{
 		MouseEvent e = new MouseEvent(
-			client.getCanvas(), id,
-			System.currentTimeMillis(),
-			0, point.getX(), point.getY(),
-			1, false, 1
+				client.getCanvas(), id,
+				System.currentTimeMillis(),
+				0, point.getX(), point.getY(),
+				1, false, 1
 		);
 
 		client.getCanvas().dispatchEvent(e);
@@ -994,8 +986,8 @@ public class ElUtils extends Plugin
 		coordX = localPoint.getSceneX() + getRandomIntBetweenRange(-Math.abs(rand), Math.abs(rand));
 		coordY = localPoint.getSceneY() + getRandomIntBetweenRange(-Math.abs(rand), Math.abs(rand));
 		walkAction = true;
-		targetMenu = new MenuEntry("Walk here", "", 0, MenuAction.WALK.getId(),
-			0, 0, false);
+		targetMenu = new LegacyMenuEntry("Walk here", "", 0, MenuAction.WALK.getId(),
+				0, 0, false);
 		delayMouseClick(new Point(0, 0), delay);
 	}
 
@@ -1007,8 +999,8 @@ public class ElUtils extends Plugin
 			coordX = localPoint.getSceneX() + getRandomIntBetweenRange(-Math.abs(rand), Math.abs(rand));
 			coordY = localPoint.getSceneY() + getRandomIntBetweenRange(-Math.abs(rand), Math.abs(rand));
 			walkAction = true;
-			targetMenu = new MenuEntry("Walk here", "", 0, MenuAction.WALK.getId(),
-				0, 0, false);
+			targetMenu = new LegacyMenuEntry("Walk here", "", 0, MenuAction.WALK.getId(),
+					0, 0, false);
 			delayMouseClick(new Point(0, 0), delay);
 		}
 		else
@@ -1236,7 +1228,7 @@ public class ElUtils extends Plugin
 			nextRunEnergy = getRandomIntBetweenRange(minEnergy, minEnergy + getRandomIntBetweenRange(0, randMax));
 		}
 		if (client.getEnergy() > nextRunEnergy ||
-			client.getVar(Varbits.RUN_SLOWED_DEPLETION_ACTIVE) != 0)
+				client.getVarbitValue(Varbits.RUN_SLOWED_DEPLETION_ACTIVE) != 0)
 		{
 			if (drinkStamPot(15 + getRandomIntBetweenRange(0, 30)))
 			{
@@ -1262,7 +1254,7 @@ public class ElUtils extends Plugin
 			nextRunEnergy = getRandomIntBetweenRange(minEnergy, minEnergy + getRandomIntBetweenRange(0, randMax));
 		}
 		if (client.getEnergy() > (minEnergy + getRandomIntBetweenRange(0, randMax)) ||
-			client.getVar(Varbits.RUN_SLOWED_DEPLETION_ACTIVE) != 0)
+				client.getVarbitValue(Varbits.RUN_SLOWED_DEPLETION_ACTIVE) != 0)
 		{
 			if (drinkStamPot(potEnergy))
 			{
@@ -1285,7 +1277,7 @@ public class ElUtils extends Plugin
 		log.info("enabling run");
 		executorService.submit(() ->
 		{
-			targetMenu = new MenuEntry("Toggle Run", "", 1, 57, -1, 10485783, false);
+			targetMenu = new LegacyMenuEntry("Toggle Run", "", 1, 57, -1, 10485783, false);
 			delayMouseClick(runOrbBounds, getRandomIntBetweenRange(10, 250));
 		});
 	}
@@ -1294,10 +1286,10 @@ public class ElUtils extends Plugin
 	public WidgetItem shouldStamPot(int energy)
 	{
 		if (!getInventoryItems(List.of(ItemID.STAMINA_POTION1, ItemID.STAMINA_POTION2, ItemID.STAMINA_POTION3, ItemID.STAMINA_POTION4)).isEmpty()
-			&& client.getVar(Varbits.RUN_SLOWED_DEPLETION_ACTIVE) == 0 && client.getEnergy() < energy && !isBankOpen())
+				&& client.getVarbitValue(Varbits.RUN_SLOWED_DEPLETION_ACTIVE) == 0 && client.getEnergy() < energy && !isBankOpen())
 		{
 			return getInventoryWidgetItem(List.of(ItemID.STAMINA_POTION1, ItemID.STAMINA_POTION2, ItemID.STAMINA_POTION3,
-				ItemID.STAMINA_POTION4, ItemID.ENERGY_POTION1, ItemID.ENERGY_POTION2, ItemID.ENERGY_POTION3, ItemID.ENERGY_POTION4));
+					ItemID.STAMINA_POTION4, ItemID.ENERGY_POTION1, ItemID.ENERGY_POTION2, ItemID.ENERGY_POTION3, ItemID.ENERGY_POTION4));
 		}
 		else
 		{
@@ -1311,7 +1303,7 @@ public class ElUtils extends Plugin
 		if (staminaPotion != null)
 		{
 			log.info("using stamina potion");
-			targetMenu = new MenuEntry("", "", staminaPotion.getId(), MenuAction.ITEM_FIRST_OPTION.getId(), staminaPotion.getIndex(), 9764864, false);
+			targetMenu = new LegacyMenuEntry("", "", staminaPotion.getId(), MenuAction.ITEM_FIRST_OPTION.getId(), staminaPotion.getIndex(), 9764864, false);
 			delayMouseClick(staminaPotion.getCanvasBounds(), getRandomIntBetweenRange(5, 200));
 			return true;
 		}
@@ -1321,7 +1313,7 @@ public class ElUtils extends Plugin
 	public void logout()
 	{
 		int param1 = (client.getWidget(WidgetInfo.LOGOUT_BUTTON) != null) ? 11927560 : 4522007;
-		targetMenu = new MenuEntry("", "", 1, MenuAction.CC_OP.getId(), -1, param1, false);
+		targetMenu = new LegacyMenuEntry("", "", 1, MenuAction.CC_OP.getId(), -1, param1, false);
 		Widget logoutWidget = client.getWidget(WidgetInfo.LOGOUT_BUTTON);
 		if (logoutWidget != null)
 		{
@@ -1336,6 +1328,74 @@ public class ElUtils extends Plugin
 	/**
 	 * INVENTORY FUNCTIONS
 	 */
+
+	public WidgetItem createWidgetItem(Widget item) {
+		boolean isDragged = item.isWidgetItemDragged(item.getItemId());
+
+		int dragOffsetX = 0;
+		int dragOffsetY = 0;
+
+		if (isDragged) {
+			Point p = item.getWidgetItemDragOffsets();
+			dragOffsetX = p.getX();
+			dragOffsetY = p.getY();
+		}
+		// set bounds to same size as default inventory
+		Rectangle bounds = item.getBounds();
+		bounds.setBounds(bounds.x - 1, bounds.y - 1, 32, 32);
+		Rectangle dragBounds = item.getBounds();
+		dragBounds.setBounds(bounds.x + dragOffsetX, bounds.y + dragOffsetY, 32, 32);
+
+		return new WidgetItem(item.getItemId(), item.getItemQuantity(), item.getIndex(), bounds, item, dragBounds);
+	}
+
+	public Collection<WidgetItem> getInventoryWidgetItems() {
+		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		if (inventoryWidget == null) {
+			return new ArrayList<>();
+		}
+
+		Widget[] children = inventoryWidget.getChildren();
+
+		if (children == null) {
+			return new ArrayList<>();
+		}
+
+		Collection<WidgetItem> widgetItems = new ArrayList<>();
+		for (Widget item : children) {
+			if (item.getItemId() != 6512) {
+				widgetItems.add(createWidgetItem(item));
+			}
+		}
+
+		return widgetItems;
+	}
+
+	public WidgetItem getInventoryItem(List<Integer> idList) {
+		return getInventoryItem(idList.stream().mapToInt(Integer::intValue).toArray());
+	}
+
+	public WidgetItem getInventoryItem(int... ids) {
+		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+
+		if (inventoryWidget == null) {
+			return null;
+		}
+
+		Widget[] children = inventoryWidget.getChildren();
+
+		if (children == null) {
+			return null;
+		}
+
+		for (Widget item : children) {
+			if (Arrays.stream(ids).anyMatch(i -> i == item.getItemId())) {
+				return createWidgetItem(item);
+			}
+		}
+
+		return null;
+	}
 
 	public boolean inventoryFull()
 	{
@@ -1352,7 +1412,7 @@ public class ElUtils extends Plugin
 		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
-			return 28 - inventoryWidget.getWidgetItems().size();
+			return 28 - getInventoryWidgetItems().size();
 		}
 		else
 		{
@@ -1367,7 +1427,7 @@ public class ElUtils extends Plugin
 
 		if (inventoryWidget != null)
 		{
-			Collection<WidgetItem> items = inventoryWidget.getWidgetItems();
+			Collection<WidgetItem> items = getInventoryWidgetItems();
 			for (WidgetItem item : items)
 			{
 				if (ids.contains(item.getId()))
@@ -1384,12 +1444,12 @@ public class ElUtils extends Plugin
 	public List<WidgetItem> getInventoryItems(String itemName)
 	{
 		return new InventoryWidgetItemQuery()
-			.filter(i -> client.getItemComposition(i.getId())
-				.getName()
-				.toLowerCase()
-				.contains(itemName))
-			.result(client)
-			.list;
+				.filter(i -> client.getItemComposition(i.getId())
+						.getName()
+						.toLowerCase()
+						.contains(itemName))
+				.result(client)
+				.list;
 	}
 
 	public Collection<WidgetItem> getAllInventoryItems()
@@ -1397,7 +1457,7 @@ public class ElUtils extends Plugin
 		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
-			return inventoryWidget.getWidgetItems();
+			return getInventoryWidgetItems();
 		}
 		return null;
 	}
@@ -1440,7 +1500,7 @@ public class ElUtils extends Plugin
 		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
-			Collection<WidgetItem> items = inventoryWidget.getWidgetItems();
+			Collection<WidgetItem> items = getInventoryWidgetItems();
 			for (WidgetItem item : items)
 			{
 				if (item.getId() == id)
@@ -1457,7 +1517,7 @@ public class ElUtils extends Plugin
 		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
-			Collection<WidgetItem> items = inventoryWidget.getWidgetItems();
+			Collection<WidgetItem> items = getInventoryWidgetItems();
 			for (WidgetItem item : items)
 			{
 				if (ids.contains(item.getId()))
@@ -1488,7 +1548,7 @@ public class ElUtils extends Plugin
 		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
-			Collection<WidgetItem> items = inventoryWidget.getWidgetItems();
+			Collection<WidgetItem> items = getInventoryWidgetItems();
 			for (WidgetItem item : items)
 			{
 				if (ignoreIDs.contains(item.getId()))
@@ -1513,7 +1573,7 @@ public class ElUtils extends Plugin
 		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
-			Collection<WidgetItem> items = inventoryWidget.getWidgetItems();
+			Collection<WidgetItem> items = getInventoryWidgetItems();
 			for (WidgetItem item : items)
 			{
 				String[] menuActions = itemManager.getItemComposition(item.getId()).getInventoryActions();
@@ -1534,7 +1594,7 @@ public class ElUtils extends Plugin
 		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
-			Collection<WidgetItem> items = inventoryWidget.getWidgetItems();
+			Collection<WidgetItem> items = getInventoryWidgetItems();
 			for (WidgetItem item : items)
 			{
 				String[] menuActions = itemManager.getItemComposition(item.getId()).getInventoryActions();
@@ -1556,7 +1616,7 @@ public class ElUtils extends Plugin
 		int total = 0;
 		if (inventoryWidget != null)
 		{
-			Collection<WidgetItem> items = inventoryWidget.getWidgetItems();
+			Collection<WidgetItem> items = getInventoryWidgetItems();
 			for (WidgetItem item : items)
 			{
 				if (item.getId() == id)
@@ -1578,7 +1638,7 @@ public class ElUtils extends Plugin
 		int total = 0;
 		if (inventoryWidget != null)
 		{
-			Collection<WidgetItem> items = inventoryWidget.getWidgetItems();
+			Collection<WidgetItem> items = getInventoryWidgetItems();
 			for (WidgetItem item : items)
 			{
 				if (item.getId() == id)
@@ -1598,9 +1658,9 @@ public class ElUtils extends Plugin
 		}
 
 		return new InventoryItemQuery(InventoryID.INVENTORY)
-			.idEquals(itemID)
-			.result(client)
-			.size() >= 1;
+				.idEquals(itemID)
+				.result(client)
+				.size() >= 1;
 	}
 
 	public boolean inventoryContains(String itemName)
@@ -1611,12 +1671,12 @@ public class ElUtils extends Plugin
 		}
 
 		WidgetItem inventoryItem = new InventoryWidgetItemQuery()
-			.filter(i -> client.getItemComposition(i.getId())
-				.getName()
-				.toLowerCase()
-				.contains(itemName))
-			.result(client)
-			.first();
+				.filter(i -> client.getItemComposition(i.getId())
+						.getName()
+						.toLowerCase()
+						.contains(itemName))
+				.result(client)
+				.first();
 
 		return inventoryItem != null;
 	}
@@ -1628,9 +1688,9 @@ public class ElUtils extends Plugin
 			return false;
 		}
 		Item item = new InventoryItemQuery(InventoryID.INVENTORY)
-			.idEquals(itemID)
-			.result(client)
-			.first();
+				.idEquals(itemID)
+				.result(client)
+				.first();
 
 		return item != null && item.getQuantity() >= minStackAmount;
 	}
@@ -1641,7 +1701,7 @@ public class ElUtils extends Plugin
 		int total = 0;
 		if (inventoryWidget != null)
 		{
-			Collection<WidgetItem> items = inventoryWidget.getWidgetItems();
+			Collection<WidgetItem> items = getInventoryWidgetItems();
 			for (WidgetItem item : items)
 			{
 				if (item.getId() == id)
@@ -1664,7 +1724,7 @@ public class ElUtils extends Plugin
 		int total = 0;
 		if (inventoryWidget != null)
 		{
-			Collection<WidgetItem> items = inventoryWidget.getWidgetItems();
+			Collection<WidgetItem> items = getInventoryWidgetItems();
 			for (WidgetItem item : items)
 			{
 				if (ids.contains(item.getId()))
@@ -1729,7 +1789,7 @@ public class ElUtils extends Plugin
 	{
 		assert !client.isClientThread();
 
-		targetMenu = new MenuEntry("", "", item.getId(), MenuAction.ITEM_FIFTH_OPTION.getId(), item.getIndex(), 9764864, false);
+		targetMenu = new LegacyMenuEntry("", "", 7, MenuAction.CC_OP_LOW_PRIORITY.getId(), item.getIndex(), 9764864, false);
 		click(item.getCanvasBounds());
 	}
 
@@ -1832,8 +1892,8 @@ public class ElUtils extends Plugin
 					{
 						log.info("interacting inventory item: {}", item.getId());
 						sleep(minDelayBetween, maxDelayBetween);
-						setMenuEntry(new MenuEntry("", "", item.getId(), opcode, item.getIndex(), WidgetInfo.INVENTORY.getId(),
-							false));
+						setMenuEntry(new LegacyMenuEntry("", "", item.getId(), opcode, item.getIndex(), WidgetInfo.INVENTORY.getId(),
+								false));
 						click(item.getCanvasBounds());
 						if (!interactAll)
 						{
@@ -1873,8 +1933,8 @@ public class ElUtils extends Plugin
 					{
 						log.info("interacting inventory item: {}", item.getId());
 						sleep(minDelayBetween, maxDelayBetween);
-						setModifiedMenuEntry(new MenuEntry("", "", item1.getId(), opcode, item1.getIndex(), WidgetInfo.INVENTORY.getId(),
-							false), item.getId(), item.getIndex(), MenuAction.ITEM_USE_ON_WIDGET_ITEM.getId());
+						setModifiedMenuEntry(new LegacyMenuEntry("", "", item1.getId(), opcode, item1.getIndex(), WidgetInfo.INVENTORY.getId(),
+								false), item.getId(), item.getIndex(), MenuAction.ITEM_USE_ON_ITEM.getId());
 						click(item1.getCanvasBounds());
 						if (!interactAll)
 						{
@@ -1895,17 +1955,17 @@ public class ElUtils extends Plugin
 	public boolean runePouchContains(int id)
 	{
 		Set<Integer> runePouchIds = new HashSet<>();
-		if (client.getVar(Varbits.RUNE_POUCH_RUNE1) != 0)
+		if (client.getVarbitValue(Varbits.RUNE_POUCH_RUNE1) != 0)
 		{
-			runePouchIds.add(Runes.getRune(client.getVar(Varbits.RUNE_POUCH_RUNE1)).getItemId());
+			runePouchIds.add(Runes.getRune(client.getVarbitValue(Varbits.RUNE_POUCH_RUNE1)).getItemId());
 		}
-		if (client.getVar(Varbits.RUNE_POUCH_RUNE2) != 0)
+		if (client.getVarbitValue(Varbits.RUNE_POUCH_RUNE2) != 0)
 		{
-			runePouchIds.add(Runes.getRune(client.getVar(Varbits.RUNE_POUCH_RUNE2)).getItemId());
+			runePouchIds.add(Runes.getRune(client.getVarbitValue(Varbits.RUNE_POUCH_RUNE2)).getItemId());
 		}
-		if (client.getVar(Varbits.RUNE_POUCH_RUNE3) != 0)
+		if (client.getVarbitValue(Varbits.RUNE_POUCH_RUNE3) != 0)
 		{
-			runePouchIds.add(Runes.getRune(client.getVar(Varbits.RUNE_POUCH_RUNE3)).getItemId());
+			runePouchIds.add(Runes.getRune(client.getVarbitValue(Varbits.RUNE_POUCH_RUNE3)).getItemId());
 		}
 		for (int runePouchId : runePouchIds)
 		{
@@ -1932,17 +1992,17 @@ public class ElUtils extends Plugin
 	public int runePouchQuanitity(int id)
 	{
 		Map<Integer, Integer> runePouchSlots = new HashMap<>();
-		if (client.getVar(Varbits.RUNE_POUCH_RUNE1) != 0)
+		if (client.getVarbitValue(Varbits.RUNE_POUCH_RUNE1) != 0)
 		{
-			runePouchSlots.put(Runes.getRune(client.getVar(Varbits.RUNE_POUCH_RUNE1)).getItemId(), client.getVar(Varbits.RUNE_POUCH_AMOUNT1));
+			runePouchSlots.put(Runes.getRune(client.getVarbitValue(Varbits.RUNE_POUCH_RUNE1)).getItemId(), client.getVarbitValue(Varbits.RUNE_POUCH_AMOUNT1));
 		}
-		if (client.getVar(Varbits.RUNE_POUCH_RUNE2) != 0)
+		if (client.getVarbitValue(Varbits.RUNE_POUCH_RUNE2) != 0)
 		{
-			runePouchSlots.put(Runes.getRune(client.getVar(Varbits.RUNE_POUCH_RUNE2)).getItemId(), client.getVar(Varbits.RUNE_POUCH_AMOUNT2));
+			runePouchSlots.put(Runes.getRune(client.getVarbitValue(Varbits.RUNE_POUCH_RUNE2)).getItemId(), client.getVarbitValue(Varbits.RUNE_POUCH_AMOUNT2));
 		}
-		if (client.getVar(Varbits.RUNE_POUCH_RUNE3) != 0)
+		if (client.getVarbitValue(Varbits.RUNE_POUCH_RUNE3) != 0)
 		{
-			runePouchSlots.put(Runes.getRune(client.getVar(Varbits.RUNE_POUCH_RUNE3)).getItemId(), client.getVar(Varbits.RUNE_POUCH_AMOUNT3));
+			runePouchSlots.put(Runes.getRune(client.getVarbitValue(Varbits.RUNE_POUCH_RUNE3)).getItemId(), client.getVarbitValue(Varbits.RUNE_POUCH_AMOUNT3));
 		}
 		if (runePouchSlots.containsKey(id))
 		{
@@ -1971,7 +2031,7 @@ public class ElUtils extends Plugin
 		{
 			return;
 		}
-		targetMenu = new MenuEntry("", "", 1, MenuAction.CC_OP.getId(), 11, 786434, false); //close bank
+		targetMenu = new LegacyMenuEntry("", "", 1, MenuAction.CC_OP.getId(), 11, 786434, false); //close bank
 		Widget bankCloseWidget = client.getWidget(WidgetInfo.BANK_PIN_EXIT_BUTTON);
 		if (bankCloseWidget != null)
 		{
@@ -1984,7 +2044,7 @@ public class ElUtils extends Plugin
 	public int getBankMenuOpcode(int bankID)
 	{
 		return Banks.BANK_CHECK_BOX.contains(bankID) ? MenuAction.GAME_OBJECT_FIRST_OPTION.getId() :
-			MenuAction.GAME_OBJECT_SECOND_OPTION.getId();
+				MenuAction.GAME_OBJECT_SECOND_OPTION.getId();
 	}
 
 	//doesn't NPE
@@ -2161,11 +2221,11 @@ public class ElUtils extends Plugin
 			Widget depositInventoryWidget = client.getWidget(WidgetInfo.BANK_DEPOSIT_INVENTORY);
 			if (isDepositBoxOpen())
 			{
-				targetMenu = new MenuEntry("", "", 1, MenuAction.CC_OP.getId(), -1, 12582916, false); //deposit all in bank interface
+				targetMenu = new LegacyMenuEntry("", "", 1, MenuAction.CC_OP.getId(), -1, 12582916, false); //deposit all in bank interface
 			}
 			else
 			{
-				targetMenu = new MenuEntry("", "", 1, MenuAction.CC_OP.getId(), -1, 786473, false); //deposit all in bank interface
+				targetMenu = new LegacyMenuEntry("", "", 1, MenuAction.CC_OP.getId(), -1, 786474, false); //deposit all in bank interface
 			}
 			if ((depositInventoryWidget != null))
 			{
@@ -2221,8 +2281,8 @@ public class ElUtils extends Plugin
 			return;
 		}
 		boolean depositBox = isDepositBoxOpen();
-		targetMenu = new MenuEntry("", "", (depositBox) ? 1 : 8, MenuAction.CC_OP.getId(), item.getIndex(),
-			(depositBox) ? 12582914 : 983043, false);
+		targetMenu = new LegacyMenuEntry("", "", (depositBox) ? 1 : 8, MenuAction.CC_OP.getId(), item.getIndex(),
+				(depositBox) ? 12582914 : 983043, false);
 		click(item.getCanvasBounds());
 	}
 
@@ -2277,8 +2337,8 @@ public class ElUtils extends Plugin
 		}
 		boolean depositBox = isDepositBoxOpen();
 
-		targetMenu = new MenuEntry("", "", (client.getVarbitValue(6590) == 0) ? 2 : 3, MenuAction.CC_OP.getId(), item.getIndex(),
-			(depositBox) ? 12582914 : 983043, false);
+		targetMenu = new LegacyMenuEntry("", "", (client.getVarbitValue(6590) == 0) ? 2 : 3, MenuAction.CC_OP.getId(), item.getIndex(),
+				(depositBox) ? 12582914 : 983043, false);
 		delayMouseClick(item.getCanvasBounds(), getRandomIntBetweenRange(0, 50));
 	}
 
@@ -2291,11 +2351,100 @@ public class ElUtils extends Plugin
 		depositOneOfItem(getInventoryWidgetItem(itemID));
 	}
 
+	public void equipItemsBank(Collection<Integer> ids, int minDelayBetween, int maxDelayBetween)
+	{
+		if (!isBankOpen() && !isDepositBoxOpen())
+		{
+			log.info("can't equip items in bank, its not open");
+			return;
+		}
+		Collection<WidgetItem> inventoryItems = getAllInventoryItems();
+		executorService.submit(() ->
+		{
+			try
+			{
+				iterating = true;
+				for (WidgetItem item : inventoryItems)
+				{
+					if (ids.contains(item.getId())) //6512 is empty widget slot
+					{
+						log.info("equipping item: " + item.getId());
+						sleep(minDelayBetween, maxDelayBetween);
+						equipItemBank(item);
+					}
+				}
+				iterating = false;
+			}
+			catch (Exception e)
+			{
+				iterating = false;
+				e.printStackTrace();
+			}
+		});
+	}
+
+	public void equipItemBank(WidgetItem item)
+	{
+		assert !client.isClientThread();
+
+		targetMenu = new LegacyMenuEntry("", "", 9, MenuAction.CC_OP_LOW_PRIORITY.getId(), item.getIndex(), 983043, false);
+		click(item.getCanvasBounds());
+	}
+
+	public void withdrawOneOfItems(Collection<Integer> itemIDs) //itemIDs is a list of items to withdraw
+	{
+		log.info("withdraw items");
+		log.info(itemIDs.toString());
+		if (!isBankOpen() && !isDepositBoxOpen())
+		{
+			return;
+		}
+
+		List<Widget> toWithdrawWidgets = new ArrayList<>();
+		for(int withdrawId : itemIDs){
+			if(!getAllInventoryItemIDs().contains(withdrawId)){
+				if(getBankItemWidget(withdrawId)!=null){
+					toWithdrawWidgets.add(getBankItemWidget(withdrawId));
+				} else {
+					log.info("Trying to withdraw an item we don't have.");
+				}
+			}
+		}
+
+		log.info(toWithdrawWidgets.toString());
+
+		int varbit = (client.getVarbitValue(6590) == 0) ? 1 : 2;
+
+		executorService.submit(() ->
+		{
+			try
+			{
+				iterating = true;
+				for (Widget toWithdraw : toWithdrawWidgets){
+					if(!inventoryContains(toWithdraw.getItemId())){
+						log.info("attempting to withdraw items");
+						targetMenu = new LegacyMenuEntry("", "", varbit, MenuAction.CC_OP.getId(), toWithdraw.getIndex(), 786445, false);
+						setMenuEntry(targetMenu);
+						clickRandomPointCenter(-200, 200);
+						sleep(80, 170);
+					}
+				}
+				toWithdrawWidgets.clear();
+				iterating = false;
+			}
+			catch (Exception e)
+			{
+				iterating = false;
+				e.printStackTrace();
+			}
+		});
+	}
+
 	public void withdrawAllItem(Widget bankItemWidget)
 	{
 		executorService.submit(() ->
 		{
-			targetMenu = new MenuEntry("Withdraw-All", "", 7, MenuAction.CC_OP.getId(), bankItemWidget.getIndex(), 786444, false);
+			targetMenu = new LegacyMenuEntry("Withdraw-All", "", 7, MenuAction.CC_OP.getId(), bankItemWidget.getIndex(), 786445, false);
 			clickRandomPointCenter(-200, 200);
 		});
 	}
@@ -2317,7 +2466,7 @@ public class ElUtils extends Plugin
 	{
 		executorService.submit(() ->
 		{
-			targetMenu = new MenuEntry("", "", (client.getVarbitValue(6590) == 0) ? 1 : 2, MenuAction.CC_OP.getId(), bankItemWidget.getIndex(), 786444, false);
+			targetMenu = new LegacyMenuEntry("", "", (client.getVarbitValue(6590) == 0) ? 1 : 2, MenuAction.CC_OP.getId(), bankItemWidget.getIndex(), 786445, false);
 			setMenuEntry(targetMenu);
 			clickRandomPointCenter(-200, 200);
 		});
@@ -2354,7 +2503,7 @@ public class ElUtils extends Plugin
 						identifier = 6;
 						break;
 				}
-				targetMenu = new MenuEntry("", "", identifier, MenuAction.CC_OP.getId(), item.getIndex(), 786444, false);
+				targetMenu = new LegacyMenuEntry("", "", identifier, MenuAction.CC_OP.getId(), item.getIndex(), 786445, false);
 				setMenuEntry(targetMenu);
 				delayClickRandomPointCenter(-200, 200, 50);
 				if (identifier == 6)
@@ -2374,7 +2523,7 @@ public class ElUtils extends Plugin
 	 * GRAND EXCHANGE FUNCTIONS
 	 */
 
-	public OSBGrandExchangeResult getOSBItem(int itemId)
+	/*public OSBGrandExchangeResult getOSBItem(int itemId)
 	{
 		log.debug("Looking up OSB item price {}", itemId);
 		try
@@ -2541,7 +2690,7 @@ public class ElUtils extends Plugin
 		}
 	}
 
-	public void oneClickCastSpell(WidgetInfo spellWidget, MenuEntry targetMenu, long sleepLength)
+	public void oneClickCastSpell(WidgetInfo spellWidget, LegacyMenuEntry targetMenu, long sleepLength)
 	{
 		setMenuEntry(targetMenu, true);
 		delayMouseClick(new Rectangle(0, 0, 100, 100), sleepLength);
@@ -2549,7 +2698,7 @@ public class ElUtils extends Plugin
 		delayMouseClick(new Rectangle(0, 0, 100, 100), getRandomIntBetweenRange(20, 60));
 	}
 
-	public void oneClickCastSpell(WidgetInfo spellWidget, MenuEntry targetMenu, Rectangle targetBounds, long sleepLength)
+	public void oneClickCastSpell(WidgetInfo spellWidget, LegacyMenuEntry targetMenu, Rectangle targetBounds, long sleepLength)
 	{
 		setMenuEntry(targetMenu, false);
 		setSelectSpell(spellWidget);
@@ -2564,18 +2713,18 @@ public class ElUtils extends Plugin
 		client.setSelectedSpellChildIndex(-1);
 	}
 
-	public void setMenuEntry(MenuEntry menuEntry)
+	public void setMenuEntry(LegacyMenuEntry menuEntry)
 	{
 		targetMenu = menuEntry;
 	}
 
-	public void setMenuEntry(MenuEntry menuEntry, boolean consume)
+	public void setMenuEntry(LegacyMenuEntry menuEntry, boolean consume)
 	{
 		targetMenu = menuEntry;
 		consumeClick = consume;
 	}
 
-	public void setModifiedMenuEntry(MenuEntry menuEntry, int itemID, int itemIndex, int opCode)
+	public void setModifiedMenuEntry(LegacyMenuEntry menuEntry, int itemID, int itemIndex, int opCode)
 	{
 		targetMenu = menuEntry;
 		modifiedMenu = true;
@@ -2588,13 +2737,13 @@ public class ElUtils extends Plugin
 	private void onMenuEntryAdded(MenuEntryAdded event)
 	{
 		if (event.getOpcode() == MenuAction.CC_OP.getId() && (event.getParam1() == WidgetInfo.WORLD_SWITCHER_LIST.getId() ||
-			event.getParam1() == 11927560 || event.getParam1() == 4522007 || event.getParam1() == 24772686))
+				event.getParam1() == 11927560 || event.getParam1() == 4522007 || event.getParam1() == 24772686))
 		{
 			return;
 		}
 		if (targetMenu != null)
 		{
-			client.setLeftClickMenuEntry(targetMenu);
+			//client.setLeftClickMenuEntry(targetMenu);
 			if (modifiedMenu)
 			{
 				event.setModified();
@@ -2606,7 +2755,7 @@ public class ElUtils extends Plugin
 	private void onMenuOptionClicked(MenuOptionClicked event)
 	{
 		if (event.getMenuAction() == MenuAction.CC_OP && (event.getWidgetId() == WidgetInfo.WORLD_SWITCHER_LIST.getId() ||
-			event.getWidgetId() == 11927560 || event.getWidgetId() == 4522007 || event.getWidgetId() == 24772686))
+				event.getWidgetId() == 11927560 || event.getWidgetId() == 4522007 || event.getWidgetId() == 24772686))
 		{
 			//Either logging out or world-hopping which is handled by 3rd party plugins so let them have priority
 			log.info("Received world-hop/login related click. Giving them priority");
@@ -2637,25 +2786,25 @@ public class ElUtils extends Plugin
 				client.setSelectedItemSlot(modifiedItemIndex);
 				client.setSelectedItemID(modifiedItemID);
 				log.info("doing a Modified MOC, mod ID: {}, mod index: {}, param1: {}", modifiedItemID, modifiedItemIndex, targetMenu.getParam1());
-				menuAction(event,targetMenu.getOption(), targetMenu.getTarget(), targetMenu.getIdentifier(), MenuAction.of(modifiedOpCode),
-					targetMenu.getParam0(), targetMenu.getParam1());
+				menuAction(event,targetMenu.getOption(), targetMenu.getTarget(), targetMenu.getIdentifier(), modifiedOpCode,
+						targetMenu.getParam0(), targetMenu.getParam1());
 				modifiedMenu = false;
 			}
 			else
 			{
 				menuAction(event,targetMenu.getOption(), targetMenu.getTarget(), targetMenu.getIdentifier(), targetMenu.getMenuAction(),
-					targetMenu.getParam0(), targetMenu.getParam1());
+						targetMenu.getParam0(), targetMenu.getParam1());
 			}
 			targetMenu = null;
 		}
 	}
 
-	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, MenuAction menuAction, int param0, int param1)
+	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, int menuAction, int param0, int param1)
 	{
 		menuOptionClicked.setMenuOption(option);
 		menuOptionClicked.setMenuTarget(target);
 		menuOptionClicked.setId(identifier);
-		menuOptionClicked.setMenuAction(menuAction);
+		menuOptionClicked.setMenuAction(MenuAction.of(menuAction));
 		menuOptionClicked.setActionParam(param0);
 		menuOptionClicked.setWidgetId(param1);
 		log.info(menuOptionClicked.toString());

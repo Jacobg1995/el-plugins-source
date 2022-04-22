@@ -17,6 +17,7 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.elutils.ElUtils;
+import net.runelite.client.plugins.elutils.LegacyMenuEntry;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
 
@@ -64,7 +65,7 @@ public class ElHunterFreePlugin extends Plugin
 
 	//plugin data
 	GameObject targetObject;
-	MenuEntry targetMenu;
+	LegacyMenuEntry targetMenu;
 	NPC targetNPC;
 	int clientTickBreak = 0;
 	int tickTimer;
@@ -209,12 +210,12 @@ public class ElHunterFreePlugin extends Plugin
 		}
 	}
 
-	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, MenuAction menuAction, int param0, int param1)
+	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, int menuAction, int param0, int param1)
 	{
 		menuOptionClicked.setMenuOption(option);
 		menuOptionClicked.setMenuTarget(target);
 		menuOptionClicked.setId(identifier);
-		menuOptionClicked.setMenuAction(menuAction);
+		menuOptionClicked.setMenuAction(MenuAction.of(menuAction));
 		menuOptionClicked.setActionParam(param0);
 		menuOptionClicked.setWidgetId(param1);
 	}
@@ -296,7 +297,7 @@ public class ElHunterFreePlugin extends Plugin
 		if(client.getWidget(160,23)!=null){ //if run widget is visible
 			if(Integer.parseInt(client.getWidget(160,23).getText())>(30+utils.getRandomIntBetweenRange(0,20))){ //if run > 30+~20
 				if(client.getWidget(160,27).getSpriteId()==1069){ //if run is off
-					targetMenu = new MenuEntry("Toggle Run","",1,57,-1,10485782,false);
+					targetMenu = new LegacyMenuEntry("Toggle Run","",1,57,-1,10485782,false);
 					utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 					return;
 				}
@@ -317,13 +318,13 @@ public class ElHunterFreePlugin extends Plugin
 				targetObject = null;
 			}
 			if(targetObject!=null && targetObject.getWorldLocation().distanceTo2D(client.getLocalPlayer().getWorldLocation())<8){
-				targetMenu = new MenuEntry("Set-trap", "<col=ffff>Young tree", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
+				targetMenu = new LegacyMenuEntry("Set-trap", "<col=ffff>Young tree", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
 				utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 				return SETTING_TRAP;
 			} else {
 				targetObject = utils.findNearestGameObject(9004);
 				if(targetObject!=null && targetObject.getWorldLocation().distanceTo2D(client.getLocalPlayer().getWorldLocation())<8){
-					targetMenu = new MenuEntry("Check", "<col=ffff>Net trap", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
+					targetMenu = new LegacyMenuEntry("Check", "<col=ffff>Net trap", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
 					utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 					return CHECKING_TRAP;
 				}
@@ -341,13 +342,13 @@ public class ElHunterFreePlugin extends Plugin
 		} else {
 			targetObject = utils.findNearestGameObject(8990);
 			if(targetObject!=null && targetObject.getWorldLocation().distanceTo2D(client.getLocalPlayer().getWorldLocation())<6){
-				targetMenu = new MenuEntry("Set-trap", "<col=ffff>Young tree", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
+				targetMenu = new LegacyMenuEntry("Set-trap", "<col=ffff>Young tree", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
 				utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 				return SETTING_TRAP;
 			} else {
 				targetObject = utils.findNearestGameObject(8986);
 				if(targetObject!=null && targetObject.getWorldLocation().distanceTo2D(client.getLocalPlayer().getWorldLocation())<6) {
-					targetMenu = new MenuEntry("Check", "<col=ffff>Net trap", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
+					targetMenu = new LegacyMenuEntry("Check", "<col=ffff>Net trap", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
 					utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 					return CHECKING_TRAP;
 				}
@@ -361,7 +362,7 @@ public class ElHunterFreePlugin extends Plugin
 	{
 		for(TileItem tileItem : utils.spawnedItems.keySet()){
 			if(tileItem.getTile().getWorldLocation().distanceTo(client.getLocalPlayer().getWorldLocation())<10 && REQUIRED_ITEMS.contains(tileItem.getId())){
-				targetMenu = new MenuEntry ("Take", "<col=ff9040>",tileItem.getId(),20,tileItem.getTile().getSceneLocation().getX(),tileItem.getTile().getSceneLocation().getY(),false);
+				targetMenu = new LegacyMenuEntry ("Take", "<col=ff9040>",tileItem.getId(),20,tileItem.getTile().getSceneLocation().getX(),tileItem.getTile().getSceneLocation().getY(),false);
 				utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 				return true;
 			}
@@ -372,7 +373,7 @@ public class ElHunterFreePlugin extends Plugin
 	private boolean releaseLizards(int id)
 	{
 		if (utils.inventoryContains(id)){
-			targetMenu = new MenuEntry("Release", "<col=ff9040>", utils.getInventoryWidgetItem(id).getId(), 37, utils.getInventoryWidgetItem(id).getIndex(), 9764864, false);
+			targetMenu = new LegacyMenuEntry("Release", "<col=ff9040>", utils.getInventoryWidgetItem(id).getId(), 37, utils.getInventoryWidgetItem(id).getIndex(), 9764864, false);
 			utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 			return true;
 		}
@@ -388,13 +389,13 @@ public class ElHunterFreePlugin extends Plugin
 		} else if(client.getBoostedSkillLevel(Skill.HUNTER)>68){
 			targetNPC = utils.findNearestNpc(1343);
 			if(targetNPC!=null){
-				targetMenu = new MenuEntry("Retrieve", "<col=ffff00>Gyr Falcon", targetNPC.getIndex(), 9, 0, 0, false);
+				targetMenu = new LegacyMenuEntry("Retrieve", "<col=ffff00>Gyr Falcon", targetNPC.getIndex(), 9, 0, 0, false);
 				utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 				return CATCHING;
 			} else {
 				targetNPC = utils.findNearestNpc(5533);
 				if(targetNPC!=null){
-					targetMenu = new MenuEntry("Catch", "<col=ffff00>Dashing kebbit", targetNPC.getIndex(), 9, 0, 0, false);
+					targetMenu = new LegacyMenuEntry("Catch", "<col=ffff00>Dashing kebbit", targetNPC.getIndex(), 9, 0, 0, false);
 					utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 					return RETRIEVING;
 				}
@@ -402,13 +403,13 @@ public class ElHunterFreePlugin extends Plugin
 		} else if(client.getBoostedSkillLevel(Skill.HUNTER)>56){
 			targetNPC = utils.findNearestNpc(1344);
 			if(targetNPC!=null){
-				targetMenu = new MenuEntry("Retrieve", "<col=ffff00>Gyr Falcon", targetNPC.getIndex(), 9, 0, 0, false);
+				targetMenu = new LegacyMenuEntry("Retrieve", "<col=ffff00>Gyr Falcon", targetNPC.getIndex(), 9, 0, 0, false);
 				utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 				return RETRIEVING;
 			} else {
 				targetNPC = utils.findNearestNpc(5532);
 				if(targetNPC!=null){
-					targetMenu = new MenuEntry("Catch", "<col=ffff00>Dark kebbit", targetNPC.getIndex(), 9, 0, 0, false);
+					targetMenu = new LegacyMenuEntry("Catch", "<col=ffff00>Dark kebbit", targetNPC.getIndex(), 9, 0, 0, false);
 					utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 					return CATCHING;
 				}
@@ -416,13 +417,13 @@ public class ElHunterFreePlugin extends Plugin
 		} else if(client.getBoostedSkillLevel(Skill.HUNTER)>42){
 			targetNPC = utils.findNearestNpc(1342);
 			if(targetNPC!=null){
-				targetMenu = new MenuEntry("Retrieve", "<col=ffff00>Gyr Falcon", targetNPC.getIndex(), 9, 0, 0, false);
+				targetMenu = new LegacyMenuEntry("Retrieve", "<col=ffff00>Gyr Falcon", targetNPC.getIndex(), 9, 0, 0, false);
 				utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 				return RETRIEVING;
 			} else {
 				targetNPC = utils.findNearestNpc(5531);
 				if(targetNPC!=null){
-					targetMenu = new MenuEntry("Catch", "<col=ffff00>Dark kebbit", targetNPC.getIndex(), 9, 0, 0, false);
+					targetMenu = new LegacyMenuEntry("Catch", "<col=ffff00>Dark kebbit", targetNPC.getIndex(), 9, 0, 0, false);
 					utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 					return CATCHING;
 				}
@@ -464,7 +465,7 @@ public class ElHunterFreePlugin extends Plugin
 					utils.walk(startPoint,0,sleepDelay());
 					return WALKING;
 				} else {
-					targetMenu = new MenuEntry("","",10006,33,utils.getInventoryWidgetItem(10006).getIndex(),9764864,false);
+					targetMenu = new LegacyMenuEntry("","",10006,33,utils.getInventoryWidgetItem(10006).getIndex(),9764864,false);
 					utils.delayMouseClick(utils.getInventoryWidgetItem(10006).getCanvasBounds(), sleepDelay());
 					return SETTING_TRAP;
 				}
@@ -472,28 +473,28 @@ public class ElHunterFreePlugin extends Plugin
 				if(utils.getLocalGameObjects(10,9373).size()>0){
 					targetObject=utils.findNearestGameObject(9373);
 					if(targetObject!=null){
-						targetMenu = new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+						targetMenu = new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 						utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 						return CHECKING_TRAP;
 					}
 				} else if(utils.getLocalGameObjects(10,9344).size()>0){
 					targetObject=utils.findNearestGameObject(9344);
 					if(targetObject!=null){
-						targetMenu = new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+						targetMenu = new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 						utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 						return CHECKING_TRAP;
 					}
 				} else if(utils.getLocalGameObjects(10,9379).size()>0){
 					targetObject=utils.findNearestGameObject(9379);
 					if(targetObject!=null){
-						targetMenu = new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+						targetMenu = new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 						utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 						return CHECKING_TRAP;
 					}
 				} else if(utils.getLocalGameObjects(10,9348).size()>0){
 					targetObject=utils.findNearestGameObject(9348);
 					if(targetObject!=null){
-						targetMenu = new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+						targetMenu = new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 						utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 						return CHECKING_TRAP;
 					}

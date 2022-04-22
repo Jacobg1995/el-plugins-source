@@ -17,6 +17,7 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.elutils.ElUtils;
+import net.runelite.client.plugins.elutils.LegacyMenuEntry;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
 
@@ -63,7 +64,7 @@ public class ElGlassBlowerPlugin extends Plugin
 	String outputStatus;
 	int tickTimer;
 	int clientTickTimer;
-	MenuEntry targetMenu;
+	LegacyMenuEntry targetMenu;
 	boolean startGlassBlower;
 
 	int objectToBlowId;
@@ -170,13 +171,13 @@ public class ElGlassBlowerPlugin extends Plugin
 				if(!utils.isBankOpen()){
 					break;
 				}
-				targetMenu = new MenuEntry("Deposit-All", "<col=ff9040>"+objectToBlowName+"</col>", 8,1007, utils.getInventoryWidgetItem(objectToBlowId).getIndex(),983043,false);
+				targetMenu = new LegacyMenuEntry("Deposit-All", "<col=ff9040>"+objectToBlowName+"</col>", 8,1007, utils.getInventoryWidgetItem(objectToBlowId).getIndex(),983043,false);
 				utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 				status="WITHDRAWING_GLASS";
 				break;
 			case "WITHDRAWING_GLASS":
 				if(utils.bankContains(1775,27)){
-					targetMenu = new MenuEntry("Withdraw-All", "<col=ff9040>Molten glass</col>", 7,1007, utils.getBankItemWidget(1775).getIndex(),786444,false);
+					targetMenu = new LegacyMenuEntry("Withdraw-All", "<col=ff9040>Molten glass</col>", 7,1007, utils.getBankItemWidget(1775).getIndex(),786445,false);
 					utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 				} else {
 					utils.sendGameMessage("Ran out of glass");
@@ -227,7 +228,7 @@ public class ElGlassBlowerPlugin extends Plugin
 					openNearestBank();
 				} else {
 					if(utils.bankContains(1785,1)){
-						targetMenu = new MenuEntry("Withdraw-1", "Withdraw-1", 1,57, utils.getBankItemWidget(1785).getIndex(),786444,false);
+						targetMenu = new LegacyMenuEntry("Withdraw-1", "Withdraw-1", 1,57, utils.getBankItemWidget(1785).getIndex(),786445,false);
 						utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 					} else {
 						utils.sendGameMessage("No pipe in bank.");
@@ -238,13 +239,13 @@ public class ElGlassBlowerPlugin extends Plugin
 				break;
 			case "NEED_TO_BLOW":
 				if(firstTime) {
-					targetMenu = new MenuEntry("Use","Use",1785,38,utils.getInventoryWidgetItem(1785).getIndex(),9764864,false);
+					targetMenu = new LegacyMenuEntry("Use","Use",1785,38,utils.getInventoryWidgetItem(1785).getIndex(),9764864,false);
 					utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 					firstTime=false;
 					tickTimer+=tickDelay();
 					break;
 				}
-				targetMenu = new MenuEntry("Use", "<col=ff9040>Glassblowing pipe<col=ffffff> -> <col=ff9040>Molten glass", 1775,31, utils.getInventoryWidgetItem(1775).getIndex(),9764864,false);
+				targetMenu = new LegacyMenuEntry("Use", "<col=ff9040>Glassblowing pipe<col=ffffff> -> <col=ff9040>Molten glass", 1775,31, utils.getInventoryWidgetItem(1775).getIndex(),9764864,false);
 				utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 				tickTimer+=(2+tickDelay());
 				break;
@@ -253,7 +254,7 @@ public class ElGlassBlowerPlugin extends Plugin
 				tickTimer+=(2+tickDelay());
 				break;
 			case "DEPOSIT_INVENTORY":
-				targetMenu = new MenuEntry("Deposit inventory","",1,57,-1,786473,false);
+				targetMenu = new LegacyMenuEntry("Deposit inventory","",1,57,-1,786474,false);
 				utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 				tickTimer+=tickDelay();
 				break;
@@ -268,7 +269,7 @@ public class ElGlassBlowerPlugin extends Plugin
 				if(config.fastBank()){
 					break;
 				}
-				targetMenu = new MenuEntry("Deposit-All", "<col=ff9040>"+objectToBlowName+"</col>", 8,1007, utils.getInventoryWidgetItem(objectToBlowId).getIndex(),983043,false);
+				targetMenu = new LegacyMenuEntry("Deposit-All", "<col=ff9040>"+objectToBlowName+"</col>", 8,1007, utils.getInventoryWidgetItem(objectToBlowId).getIndex(),983043,false);
 				utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 				tickTimer+=tickDelay();
 				break;
@@ -277,7 +278,7 @@ public class ElGlassBlowerPlugin extends Plugin
 					break;
 				}
 				if(utils.bankContains(1775,27)){
-					targetMenu = new MenuEntry("Withdraw-All", "<col=ff9040>Molten glass</col>", 7,1007, utils.getBankItemWidget(1775).getIndex(),786444,false);
+					targetMenu = new LegacyMenuEntry("Withdraw-All", "<col=ff9040>Molten glass</col>", 7,1007, utils.getBankItemWidget(1775).getIndex(),786445,false);
 					utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 				} else {
 					utils.sendGameMessage("Ran out of glass");
@@ -306,12 +307,12 @@ public class ElGlassBlowerPlugin extends Plugin
 		}
 	}
 
-	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, MenuAction menuAction, int param0, int param1)
+	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, int menuAction, int param0, int param1)
 	{
 		menuOptionClicked.setMenuOption(option);
 		menuOptionClicked.setMenuTarget(target);
 		menuOptionClicked.setId(identifier);
-		menuOptionClicked.setMenuAction(menuAction);
+		menuOptionClicked.setMenuAction(MenuAction.of(menuAction));
 		menuOptionClicked.setActionParam(param0);
 		menuOptionClicked.setWidgetId(param1);
 	}
@@ -362,7 +363,7 @@ public class ElGlassBlowerPlugin extends Plugin
 		if(config.grandExchange()){
 			NPC targetNpc = utils.findNearestNpc(3089,1634,1633,1613);
 			if(targetNpc!=null){
-				targetMenu=new MenuEntry("Bank","<col=ffff00>Banker",targetNpc.getIndex(),11,0,0,false);
+				targetMenu=new LegacyMenuEntry("Bank","<col=ffff00>Banker",targetNpc.getIndex(),11,0,0,false);
 				utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 				return;
 			} else {
@@ -376,11 +377,11 @@ public class ElGlassBlowerPlugin extends Plugin
 				.nearestTo(client.getLocalPlayer());
 		if(targetObject!=null){
 			if(targetObject.getId()==31582){
-				targetMenu = new MenuEntry("","",targetObject.getId(),4,targetObject.getLocalLocation().getSceneX(),targetObject.getLocalLocation().getSceneY()-1,false);
+				targetMenu = new LegacyMenuEntry("","",targetObject.getId(),4,targetObject.getLocalLocation().getSceneX(),targetObject.getLocalLocation().getSceneY()-1,false);
 			} else if(targetObject.getId()==26707){
-				targetMenu = new MenuEntry("","",targetObject.getId(),3,targetObject.getLocalLocation().getSceneX(),targetObject.getLocalLocation().getSceneY(),false);
+				targetMenu = new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getLocalLocation().getSceneX(),targetObject.getLocalLocation().getSceneY(),false);
 			} else {
-				targetMenu = new MenuEntry("","",targetObject.getId(),4,targetObject.getLocalLocation().getSceneX(),targetObject.getLocalLocation().getSceneY(),false);
+				targetMenu = new LegacyMenuEntry("","",targetObject.getId(),4,targetObject.getLocalLocation().getSceneX(),targetObject.getLocalLocation().getSceneY(),false);
 			}
 			utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 		}
@@ -486,7 +487,7 @@ public class ElGlassBlowerPlugin extends Plugin
 				break;
 
 		}
-		targetMenu = new MenuEntry("Make", "<col=ff9040>"+objectToBlowName+"</col>", 1,57, -1,param1,false);
+		targetMenu = new LegacyMenuEntry("Make", "<col=ff9040>"+objectToBlowName+"</col>", 1,57, -1,param1,false);
 		utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 	}
 

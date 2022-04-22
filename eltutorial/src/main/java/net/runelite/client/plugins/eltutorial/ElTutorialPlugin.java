@@ -16,6 +16,7 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.elutils.ElUtils;
+import net.runelite.client.plugins.elutils.LegacyMenuEntry;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
 
@@ -61,7 +62,7 @@ public class ElTutorialPlugin extends Plugin
 
 	//plugin data
 	GameObject targetObject;
-	MenuEntry targetMenu;
+	LegacyMenuEntry targetMenu;
 	WallObject targetWall;
 	NPC targetNPC;
 	int clientTickBreak = 0;
@@ -207,12 +208,13 @@ public class ElTutorialPlugin extends Plugin
 	@Subscribe
 	private void onMenuOptionClicked(MenuOptionClicked event)
 	{
-		log.info("Event:" + event.toString());
+		log.info("Before -- MenuOption={} MenuTarget={} Id={} Opcode={} Param0={} Param1={} isItemOp={} ItemOp={} ItemId={} Widget={}", event.getMenuOption(), event.getMenuTarget(), event.getId(), event.getMenuAction(), event.getParam0(), event.getParam1(), event.isItemOp(), event.getItemOp(), event.getItemId(), event.getWidget());
 		if(targetMenu!=null){
 			//event.consume();
 			menuAction(event,targetMenu.getOption(),targetMenu.getTarget(),targetMenu.getIdentifier(),targetMenu.getMenuAction(),targetMenu.getParam0(),targetMenu.getParam1());
 			targetMenu=null;
 		}
+		log.info("After -- MenuOption={} MenuTarget={} Id={} Opcode={} Param0={} Param1={} isItemOp={} ItemOp={} ItemId={} Widget={}", event.getMenuOption(), event.getMenuTarget(), event.getId(), event.getMenuAction(), event.getParam0(), event.getParam1(), event.isItemOp(), event.getItemOp(), event.getItemId(), event.getWidget());
 	}
 
 	private long sleepDelay()
@@ -272,9 +274,9 @@ public class ElTutorialPlugin extends Plugin
 	private void shouldRun()
 	{
 		if(client.getWidget(160,23)!=null){ //if run widget is visible
-			if(Integer.parseInt(client.getWidget(160,23).getText())>(30+utils.getRandomIntBetweenRange(0,20))){ //if run > 30+~20
-				if(client.getWidget(160,27).getSpriteId()==1069){ //if run is off
-					targetMenu = new MenuEntry("Toggle Run","",1,57,-1,10485782,false);
+			if(Integer.parseInt(client.getWidget(160,24).getText())>(30+utils.getRandomIntBetweenRange(0,20))){ //if run > 30+~20
+				if(client.getWidget(160,28).getSpriteId()==1069){ //if run is off
+					targetMenu = new LegacyMenuEntry("Toggle Run","",1,57,-1,10485782,false);
 					utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 					return;
 				}
@@ -289,21 +291,22 @@ public class ElTutorialPlugin extends Plugin
 			case 1:
 				switch(tutorialSectionProgress){
 					case 0:
-						if(client.getWidget(162,45)!=null && !client.getWidget(162,45).isHidden()){
-							client.setVar(VarClientInt.INPUT_TYPE, 15);
-							client.setVar(VarClientStr.INPUT_TEXT, String.valueOf("zezima"));
-							client.runScript(681);
-							break;
-						} else if(client.getWidget(558,14)!=null && !client.getWidget(558,14).isHidden()){
-							selectName();
-							break;
-						} else if(client.getWidget(558,12)!=null && !client.getWidget(558,12).isHidden()){
-							if(client.getWidget(558,12).getText().contains("available")){
+						if(client.getWidget(558,13)!=null && !client.getWidget(558,13).isHidden()) {
+							if (client.getWidget(558, 13).getText().contains("whether")) {
+								client.setVar(VarClientInt.INPUT_TYPE, 15);
+								client.setVar(VarClientStr.INPUT_TEXT, String.valueOf("zezima"));
+								client.runScript(681);
+								break;
+							} else if (client.getWidget(558, 13).getText().contains("not available")) {
+								selectName();
+								break;
+							} else if (client.getWidget(558, 13).getText().contains("may set this")) {
 								setName();
-								tickTimer+=6;
+								tickTimer += 6;
 								break;
 							}
-						} else if(config.female()){
+						}
+						else if(config.female()){
 							changeLookClient(44499010);
 							clientTickCounter=100;
 							tutorialSectionProgress++;
@@ -366,13 +369,13 @@ public class ElTutorialPlugin extends Plugin
 						tutorialSectionProgress++;
 						break;
 					case 1:
-						openTab(10747951);
+						openTab(10747944);
 						break;
 				}
 				break;
 			case 7:
 				if(client.getWidget(548,3)!=null && !client.getWidget(548,3).isHidden()){
-					openTab(10747960);
+					openTab(10747951);
 					break;
 				}
 				switch(tutorialSectionProgress){
@@ -408,7 +411,7 @@ public class ElTutorialPlugin extends Plugin
 						tutorialSectionProgress++;
 						break;
 					case 3:
-						openTab(10747966);
+						openTab(10747958);
 						break;
 				}
 				break;
@@ -416,7 +419,7 @@ public class ElTutorialPlugin extends Plugin
 				talkNPC(3317);
 				break;
 			case 50:
-				openTab(10747964);
+				openTab(10747956);
 				break;
 			case 60:
 				switch(tutorialSectionProgress){
@@ -445,7 +448,7 @@ public class ElTutorialPlugin extends Plugin
 				client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 				client.setSelectedItemSlot(utils.getInventoryWidgetItem(2511).getIndex());
 				client.setSelectedItemID(2511);
-				targetMenu = new MenuEntry("","",590,31,utils.getInventoryWidgetItem(590).getIndex(),9764864,false);
+				targetMenu = new LegacyMenuEntry("","",590,31,utils.getInventoryWidgetItem(590).getIndex(),9764864,false);
 				utils.delayMouseClick(utils.getInventoryWidgetItem(590).getCanvasBounds(), sleepDelay());
 				break;
 			case 90:
@@ -475,7 +478,7 @@ public class ElTutorialPlugin extends Plugin
 				client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 				client.setSelectedItemSlot(utils.getInventoryWidgetItem(2516).getIndex());
 				client.setSelectedItemID(2516);
-				targetMenu = new MenuEntry("","",1929,31,utils.getInventoryWidgetItem(1929).getIndex(),9764864,false);
+				targetMenu = new LegacyMenuEntry("","",1929,31,utils.getInventoryWidgetItem(1929).getIndex(),9764864,false);
 				utils.delayMouseClick(utils.getInventoryWidgetItem(2516).getCanvasBounds(), sleepDelay());
 				break;
 			case 160:
@@ -500,7 +503,7 @@ public class ElTutorialPlugin extends Plugin
 						tutorialSectionProgress++;
 						break;
 					case 1:
-						openTab(10747965);
+						openTab(10747957);
 						break;
 				}
 				break;
@@ -600,7 +603,7 @@ public class ElTutorialPlugin extends Plugin
 						tutorialSectionProgress++;
 						break;
 					case 1:
-						openTab(10747967);
+						openTab(10747959);
 						break;
 				}
 				break;
@@ -637,7 +640,7 @@ public class ElTutorialPlugin extends Plugin
 				}
 				break;
 			case 430:
-				openTab(10747963);
+				openTab(10747955);
 				break;
 			case 440:
 				openDoor(9719);
@@ -730,7 +733,7 @@ public class ElTutorialPlugin extends Plugin
 						tutorialSectionProgress++;
 						break;
 					case 1:
-						openTab(10747949);
+						openTab(10747942);
 						break;
 				}
 				break;
@@ -761,7 +764,7 @@ public class ElTutorialPlugin extends Plugin
 						tutorialSectionProgress++;
 						break;
 					case 1:
-						openTab(10747968);
+						openTab(10747960);
 						break;
 				}
 				break;
@@ -784,7 +787,7 @@ public class ElTutorialPlugin extends Plugin
 						tutorialSectionProgress++;
 						break;
 					case 1:
-						openTab(10747950);
+						openTab(10747943);
 						break;
 				}
 				break;
@@ -844,7 +847,7 @@ public class ElTutorialPlugin extends Plugin
 				}
 				break;
 			case 630:
-				openTab(10747969);
+				openTab(10747961);
 				break;
 			case 640:
 				switch(tutorialSectionProgress) {
@@ -919,12 +922,14 @@ public class ElTutorialPlugin extends Plugin
 				ironmanProgress++;
 				break;
 			case 1:
-			case 13:
-			case 16:
-				pressOption(1);
-				ironmanProgress++;
+			case 17:
+			case 21:
+				if(client.getWidget(219,1)!=null && !client.getWidget(219,1).isHidden()){
+					pressOption(1);
+					ironmanProgress++;
+				}
 				break;
-			case 15:
+			case 19:
 				switch(config.type()){
 					case IRONMAN:
 						selectIron();
@@ -936,28 +941,27 @@ public class ElTutorialPlugin extends Plugin
 						break;
 				}
 				break;
-			case 17:
-			case 21:
+			case 26:
+			case 22:
 				pressKey(config.bankPin().charAt(0));
 				ironmanProgress++;
 				break;
-			case 18:
-			case 22:
+			case 27:
+			case 23:
 				pressKey(config.bankPin().charAt(1));
 				ironmanProgress++;
 				break;
-			case 19:
-			case 23:
+			case 28:
+			case 24:
 				pressKey(config.bankPin().charAt(2));
 				ironmanProgress++;
 				break;
-			case 20:
-			case 24:
+			case 29:
+			case 25:
 				pressKey(config.bankPin().charAt(3));
 				ironmanProgress++;
 				break;
-			case 25:
-				pressSpace();
+			case 30:
 				tutorialSectionProgress++;
 				break;
 		}
@@ -965,13 +969,13 @@ public class ElTutorialPlugin extends Plugin
 
 	private void changeLook(int id)
 	{
-		targetMenu = new MenuEntry("","",1,57,-1,id,false);
+		targetMenu = new LegacyMenuEntry("","",1,57,-1,id,false);
 		utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 	}
 
 	private void changeLookClient(int id)
 	{
-		targetMenu = new MenuEntry("","",1,57,-1,id,false);
+		targetMenu = new LegacyMenuEntry("","",1,57,-1,id,false);
 		utils.delayMouseClick(getRandomNullPoint(), 0);
 	}
 
@@ -979,7 +983,7 @@ public class ElTutorialPlugin extends Plugin
 	{
 		targetWall = utils.findNearestWallObject(id);
 		if(targetWall!=null){
-			targetMenu = new MenuEntry("","",targetWall.getId(),3,targetWall.getLocalLocation().getSceneX(),targetWall.getLocalLocation().getSceneY(),false);
+			targetMenu = new LegacyMenuEntry("","",targetWall.getId(),3,targetWall.getLocalLocation().getSceneX(),targetWall.getLocalLocation().getSceneY(),false);
 			if(targetWall.getConvexHull()!=null){
 				utils.delayMouseClick(targetWall.getConvexHull().getBounds(), sleepDelay());
 			} else {
@@ -992,7 +996,7 @@ public class ElTutorialPlugin extends Plugin
 	{
 		targetNPC = utils.findNearestNpc(id);
 		if(targetNPC!=null){
-			targetMenu = new MenuEntry("","",targetNPC.getIndex(),9,0,0,false);
+			targetMenu = new LegacyMenuEntry("","",targetNPC.getIndex(),9,0,0,false);
 			if(targetNPC.getConvexHull()!=null){
 				utils.delayMouseClick(targetNPC.getConvexHull().getBounds(), sleepDelay());
 			} else {
@@ -1003,7 +1007,7 @@ public class ElTutorialPlugin extends Plugin
 
 	private void openTab(int param1)
 	{
-		targetMenu = new MenuEntry("","",1,57,-1,param1,false);
+		targetMenu = new LegacyMenuEntry("","",1,57,-1,param1,false);
 		utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 	}
 
@@ -1016,26 +1020,26 @@ public class ElTutorialPlugin extends Plugin
 	{
 		targetObject = utils.findNearestGameObject(id);
 		if(targetObject!=null){
-			targetMenu = new MenuEntry("","",targetObject.getId(),opcode,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),opcode,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 			utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 		}
 	}
 
 	private void smithDagger()
 	{
-		targetMenu = new MenuEntry("","",1,57,-1,20447241,false);
+		targetMenu = new LegacyMenuEntry("","",1,57,-1,20447241,false);
 		utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 	}
 
 	private void closeInterface(int id)
 	{
-		targetMenu = new MenuEntry("","",1,57,11,id,false);
+		targetMenu = new LegacyMenuEntry("","",1,57,11,id,false);
 		utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 	}
 
 	private void equipItem(int id)
 	{
-		targetMenu = new MenuEntry("","",id,34,utils.getInventoryWidgetItem(id).getIndex(),9764864,false);
+		targetMenu = new LegacyMenuEntry("","",id,34,utils.getInventoryWidgetItem(id).getIndex(),9764864,false);
 		utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 	}
 
@@ -1043,7 +1047,7 @@ public class ElTutorialPlugin extends Plugin
 	{
 		targetNPC = utils.findNearestNpc(3313);
 		if(targetNPC!=null){
-			targetMenu = new MenuEntry("","",targetNPC.getIndex(),10,0,0,false);
+			targetMenu = new LegacyMenuEntry("","",targetNPC.getIndex(),10,0,0,false);
 			utils.delayMouseClick(targetNPC.getConvexHull().getBounds(), sleepDelay());
 		}
 	}
@@ -1054,7 +1058,7 @@ public class ElTutorialPlugin extends Plugin
 		if(targetNPC!=null){
 			client.setSelectedSpellWidget(utils.getSpellWidget("Wind Strike").getId());
 			client.setSelectedSpellChildIndex(-1);
-			targetMenu = new MenuEntry("","",targetNPC.getIndex(),8,0,0,false);
+			targetMenu = new LegacyMenuEntry("","",targetNPC.getIndex(),8,0,0,false);
 			utils.delayMouseClick(targetNPC.getConvexHull().getBounds(), sleepDelay());
 		}
 
@@ -1062,32 +1066,32 @@ public class ElTutorialPlugin extends Plugin
 
 	private void pressOption(int option)
 	{
-		targetMenu = new MenuEntry("","",0,30,option,14352385,false);
+		targetMenu = new LegacyMenuEntry("","",0,30,option,14352385,false);
 		utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 
 	}
 
 	private void selectName()
 	{
-		targetMenu = new MenuEntry("","",1,57,-1,36569104,false);
+		targetMenu = new LegacyMenuEntry("","",1,57,-1,36569104,false);
 		utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 	}
 
 	private void setName()
 	{
-		targetMenu = new MenuEntry("","",1,57,-1,36569106,false);
+		targetMenu = new LegacyMenuEntry("","",1,57,-1,36569107,false);
 		utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 	}
 
 	private void selectIron()
 	{
-		targetMenu = new MenuEntry("","",1,57,-1,14090251,false);
+		targetMenu = new LegacyMenuEntry("","",1,57,-1,14090249,false);
 		utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 	}
 
 	private void selectHardcore()
 	{
-		targetMenu = new MenuEntry("","",1,57,-1,14090252,false);
+		targetMenu = new LegacyMenuEntry("","",1,57,-1,14090250,false);
 		utils.delayMouseClick(getRandomNullPoint(), sleepDelay());
 	}
 
@@ -1117,12 +1121,12 @@ public class ElTutorialPlugin extends Plugin
 		client.getCanvas().dispatchEvent(e);
 	}
 
-	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, MenuAction menuAction, int param0, int param1)
+	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, int menuAction, int param0, int param1)
 	{
 		menuOptionClicked.setMenuOption(option);
 		menuOptionClicked.setMenuTarget(target);
 		menuOptionClicked.setId(identifier);
-		menuOptionClicked.setMenuAction(menuAction);
+		menuOptionClicked.setMenuAction(MenuAction.of(menuAction));
 		menuOptionClicked.setActionParam(param0);
 		menuOptionClicked.setWidgetId(param1);
 		log.info(menuOptionClicked.toString());

@@ -26,16 +26,15 @@
 package net.runelite.client.plugins.elkarambwansfree;
 
 import com.google.inject.Provides;
-import java.awt.Rectangle;
-import java.time.Instant;
-import java.util.*;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.events.*;
+import net.runelite.api.events.ConfigButtonClicked;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -43,10 +42,18 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginManager;
-import net.runelite.client.plugins.elutils.ElUtils;
 import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
+import net.runelite.client.plugins.elutils.ElUtils;
+import net.runelite.client.plugins.elutils.LegacyMenuEntry;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
+
+import javax.inject.Inject;
+import java.awt.*;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static net.runelite.client.plugins.elkarambwansfree.ElKarambwansFreeState.*;
 
@@ -89,7 +96,7 @@ public class ElKarambwansFreePlugin extends Plugin
 	ElKarambwansFreeState state;
 	GameObject targetObject;
 	NPC targetNPC;
-	MenuEntry targetMenu;
+	LegacyMenuEntry targetMenu;
 	WorldPoint skillLocation;
 	Instant botTimer;
 	LocalPoint beforeLoc;
@@ -214,7 +221,7 @@ public class ElKarambwansFreePlugin extends Plugin
 		targetNPC = utils.findNearestNpcWithin(player.getWorldLocation(), 10, Collections.singleton(4712));
 		if (targetNPC != null)
 		{
-			targetMenu = new MenuEntry("", "", targetNPC.getIndex(), 9, 0, 0, false);
+			targetMenu = new LegacyMenuEntry("", "", targetNPC.getIndex(), 9, 0, 0, false);
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(targetNPC.getConvexHull().getBounds(), sleepDelay());
 		}
@@ -229,7 +236,7 @@ public class ElKarambwansFreePlugin extends Plugin
 		targetNPC = utils.findNearestNpcWithin(player.getWorldLocation(), 25, Collections.singleton(3092));
 		if (targetNPC != null)
 		{
-			targetMenu = new MenuEntry("Bank", "<col=ffff00>Banker", targetNPC.getIndex(), 11, 0, 0, false);
+			targetMenu = new LegacyMenuEntry("Bank", "<col=ffff00>Banker", targetNPC.getIndex(), 11, 0, 0, false);
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(targetNPC.getConvexHull().getBounds(), sleepDelay());
 		}
@@ -393,7 +400,7 @@ public class ElKarambwansFreePlugin extends Plugin
 		targetObject = utils.findNearestGameObjectWithin(player.getWorldLocation(), 25, ringID);
 		if (targetObject != null)
 		{
-			targetMenu = new MenuEntry("", "", targetObject.getId(), opcode,
+			targetMenu = new LegacyMenuEntry("", "", targetObject.getId(), opcode,
 					targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());

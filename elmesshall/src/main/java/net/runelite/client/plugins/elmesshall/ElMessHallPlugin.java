@@ -45,6 +45,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginManager;
 import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
 import net.runelite.client.plugins.elutils.ElUtils;
+import net.runelite.client.plugins.elutils.LegacyMenuEntry;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.util.WorldUtil;
 import net.runelite.http.api.worlds.World;
@@ -109,7 +110,7 @@ public class ElMessHallPlugin extends Plugin
 	ElMessHallState state;
 	GameObject targetObject;
 	NPC targetNpc;
-	MenuEntry targetMenu;
+	LegacyMenuEntry targetMenu;
 	WorldPoint skillLocation;
 	Instant botTimer;
 	LocalPoint beforeLoc;
@@ -381,7 +382,7 @@ public class ElMessHallPlugin extends Plugin
 					break;
 				case FIXING_TAB:
 					if(client.getWidget(161,64)!=null && !client.getWidget(161,64).isHidden()){
-						targetMenu=new MenuEntry("","",1,57,-1,10551354,false);
+						targetMenu=new LegacyMenuEntry("","",1,57,-1,10551354,false);
 						utils.delayMouseClick(client.getWidget(161,64).getBounds(),sleepDelay());
 						timeout = 1+tickDelay();
 					}
@@ -576,30 +577,30 @@ public class ElMessHallPlugin extends Plugin
 		}
 	}
 
-	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, MenuAction menuAction, int param0, int param1)
+	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, int menuAction, int param0, int param1)
 	{
 		menuOptionClicked.setMenuOption(option);
 		menuOptionClicked.setMenuTarget(target);
 		menuOptionClicked.setId(identifier);
-		menuOptionClicked.setMenuAction(menuAction);
+		menuOptionClicked.setMenuAction(MenuAction.of(menuAction));
 		menuOptionClicked.setActionParam(param0);
 		menuOptionClicked.setWidgetId(param1);
 	}
 
 	private void dropItem(int item){
-		targetMenu = new MenuEntry("","",item,37,utils.getInventoryWidgetItem(item).getIndex(),9764864,false);
+		targetMenu = new LegacyMenuEntry("","",item,37,utils.getInventoryWidgetItem(item).getIndex(),9764864,false);
 		utils.delayMouseClick(utils.getInventoryWidgetItem(item).getCanvasBounds(), sleepDelay());
 	}
 
 	private void getKnife(){
 		if(!utils.inventoryItemContainsAmount(946,2,false,true)){
 			if(client.getWidget(242,3)!=null && !client.getWidget(242,3).isHidden()){
-				targetMenu = new MenuEntry("","",1,57,2,15859715,false);
+				targetMenu = new LegacyMenuEntry("","",1,57,2,15859715,false);
 				utils.delayMouseClick(client.getWidget(242,3).getChild(2).getBounds(), sleepDelay());
 			} else {
 				targetObject = utils.findNearestGameObject(27376);
 				if(targetObject!=null){
-					targetMenu = new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 				}
 			}
@@ -610,7 +611,7 @@ public class ElMessHallPlugin extends Plugin
 
 	private void getFlour(int amount){
 		if(client.getWidget(149,0)==null || client.getWidget(149,0).isHidden()){
-			targetMenu=new MenuEntry("","",1,57,-1,10551353,false);
+			targetMenu=new LegacyMenuEntry("","",1,57,-1,10551353,false);
 			utils.delayMouseClick(client.getWidget(161,64).getBounds(),sleepDelay());
 			return;
 		}
@@ -624,19 +625,19 @@ public class ElMessHallPlugin extends Plugin
 				if(client.getWidget(242,3).getChild(0).getName().contains("dish")){
 					targetObject=utils.findNearestGameObject(27375);
 					if(targetObject!=null){
-						targetMenu=new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+						targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 						utils.delayMouseClick(targetObject.getConvexHull().getBounds(),sleepDelay());
 					}
 					return;
 				} else {
-					targetMenu = new MenuEntry("", "", 5, 57, 0, 15859715, false);
+					targetMenu = new LegacyMenuEntry("", "", 5, 57, 0, 15859715, false);
 					utils.delayMouseClick(client.getWidget(242, 3).getChild(1).getBounds(), sleepDelay());
 					return;
 				}
 			}else{
 				targetObject=utils.findNearestGameObject(27375);
 				if(targetObject!=null){
-					targetMenu=new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),sleepDelay());
 				}
 				timeout++;
@@ -648,7 +649,7 @@ public class ElMessHallPlugin extends Plugin
 
 	private void getPotato(int amount){
 		if(client.getWidget(149,0)==null || client.getWidget(149,0).isHidden()){
-			targetMenu=new MenuEntry("","",1,57,-1,10551353,false);
+			targetMenu=new LegacyMenuEntry("","",1,57,-1,10551353,false);
 			utils.delayMouseClick(client.getWidget(161,64).getBounds(),sleepDelay());
 			return;
 		}
@@ -659,12 +660,12 @@ public class ElMessHallPlugin extends Plugin
 				client.runScript(681);
 				client.runScript(ScriptID.MESSAGE_LAYER_CLOSE);
 			}else if(client.getWidget(242,3)!=null&&!client.getWidget(242,3).isHidden()){
-				targetMenu=new MenuEntry("","",5,57,2,15859715,false);
+				targetMenu=new LegacyMenuEntry("","",5,57,2,15859715,false);
 				utils.delayMouseClick(client.getWidget(242,3).getChild(2).getBounds(),sleepDelay());
 			}else{
 				targetObject=utils.findNearestGameObject(27375);
 				if(targetObject!=null){
-					targetMenu=new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),sleepDelay());
 				}
 				timeout++;
@@ -683,16 +684,16 @@ public class ElMessHallPlugin extends Plugin
 				client.runScript(ScriptID.MESSAGE_LAYER_CLOSE);
 			} else if (client.getWidget(242, 3) != null && !client.getWidget(242, 3).isHidden()) {
 				if (client.getWidget(242, 3).getChild(1).getName().contains("Bowl")) {
-					targetMenu = new MenuEntry("", "", 5, 57, 1, 15859715, false);
+					targetMenu = new LegacyMenuEntry("", "", 5, 57, 1, 15859715, false);
 					utils.delayMouseClick(client.getWidget(242, 3).getChild(0).getBounds(), sleepDelay());
 				} else {
-					targetMenu = new MenuEntry("", "", 1, 57, 11, 15859713, false);
+					targetMenu = new LegacyMenuEntry("", "", 1, 57, 11, 15859713, false);
 					utils.delayMouseClick(client.getWidget(242, 1).getChild(11).getBounds(), sleepDelay());
 				}
 			} else {
 				targetObject = utils.findNearestGameObject(27376);
 				if (targetObject != null) {
-					targetMenu = new MenuEntry("", "", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
+					targetMenu = new LegacyMenuEntry("", "", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 				}
 				timeout++;
@@ -711,16 +712,16 @@ public class ElMessHallPlugin extends Plugin
 				client.runScript(ScriptID.MESSAGE_LAYER_CLOSE);
 			} else if (client.getWidget(242, 3) != null && !client.getWidget(242, 3).isHidden()) {
 				if (client.getWidget(242, 3).getChild(0).getName().contains("flour")) {
-					targetMenu = new MenuEntry("", "", 1, 57, 11, 15859713, false);
+					targetMenu = new LegacyMenuEntry("", "", 1, 57, 11, 15859713, false);
 					utils.delayMouseClick(client.getWidget(242, 1).getChild(11).getBounds(), sleepDelay());
 				} else {
-					targetMenu = new MenuEntry("", "", 5, 57, 0, 15859715, false);
+					targetMenu = new LegacyMenuEntry("", "", 5, 57, 0, 15859715, false);
 					utils.delayMouseClick(client.getWidget(242, 3).getChild(0).getBounds(), sleepDelay());
 				}
 			} else {
 				targetObject = utils.findNearestGameObject(27376);
 				if (targetObject != null) {
-					targetMenu = new MenuEntry("", "", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
+					targetMenu = new LegacyMenuEntry("", "", targetObject.getId(), 3, targetObject.getSceneMinLocation().getX(), targetObject.getSceneMinLocation().getY(), false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 				}
 				timeout++;
@@ -737,7 +738,7 @@ public class ElMessHallPlugin extends Plugin
 				client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 				client.setSelectedItemSlot(utils.getInventoryWidgetItem(1923).getIndex());
 				client.setSelectedItemID(1923);
-				targetMenu = new MenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+				targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 			}
 		} else {
@@ -750,7 +751,7 @@ public class ElMessHallPlugin extends Plugin
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(14);
 			client.setSelectedItemID(13397);
-			targetMenu = new MenuEntry("","",1921,31,27,9764864,false);
+			targetMenu = new LegacyMenuEntry("","",1921,31,27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(1921).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -763,7 +764,7 @@ public class ElMessHallPlugin extends Plugin
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(13);
 			client.setSelectedItemID(13397);
-			targetMenu = new MenuEntry("","",1921,31,27,9764864,false);
+			targetMenu = new LegacyMenuEntry("","",1921,31,27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(1921).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -778,7 +779,7 @@ public class ElMessHallPlugin extends Plugin
 				client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 				client.setSelectedItemSlot(utils.getInventoryWidgetItem(1923).getIndex());
 				client.setSelectedItemID(1923);
-				targetMenu = new MenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+				targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(),sleepDelay());
 			}
 		} else {
@@ -795,12 +796,12 @@ public class ElMessHallPlugin extends Plugin
 				client.runScript(681);
 				client.runScript(ScriptID.MESSAGE_LAYER_CLOSE);
 			}else if(client.getWidget(242,3)!=null&&!client.getWidget(242,3).isHidden()){
-				targetMenu=new MenuEntry("","",5,57,4,15859715,false);
+				targetMenu=new LegacyMenuEntry("","",5,57,4,15859715,false);
 				utils.delayMouseClick(client.getWidget(242,3).getChild(5).getBounds(),sleepDelay());
 			}else{
 				targetObject=utils.findNearestGameObject(27375);
 				if(targetObject!=null){
-					targetMenu=new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),sleepDelay());
 				}
 				timeout++;
@@ -812,14 +813,14 @@ public class ElMessHallPlugin extends Plugin
 
 	private void addTomatoes(){
 		if(client.getWidget(242,1)!=null && !client.getWidget(242,1).isHidden()){
-			targetMenu=new MenuEntry("","",1,57,11,15859713,false);
+			targetMenu=new LegacyMenuEntry("","",1,57,11,15859713,false);
 			utils.delayMouseClick(client.getWidget(242,1).getChild(11).getBounds(),0);
 			clientTickDelay=25;
 		} else if(utils.inventoryContains(13405)){
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(14);
 			client.setSelectedItemID(13404);
-			targetMenu = new MenuEntry("","",13405,31,27,9764864,false);
+			targetMenu = new LegacyMenuEntry("","",13405,31,27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13405).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -835,12 +836,12 @@ public class ElMessHallPlugin extends Plugin
 				client.runScript(681);
 				client.runScript(ScriptID.MESSAGE_LAYER_CLOSE);
 			}else if(client.getWidget(242,3)!=null&&!client.getWidget(242,3).isHidden()){
-				targetMenu=new MenuEntry("","",5,57,3,15859715,false);
+				targetMenu=new LegacyMenuEntry("","",5,57,3,15859715,false);
 				utils.delayMouseClick(client.getWidget(242,3).getChild(4).getBounds(),sleepDelay());
 			}else{
 				targetObject=utils.findNearestGameObject(27375);
 				if(targetObject!=null){
-					targetMenu=new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),sleepDelay());
 				}
 				timeout++;
@@ -852,14 +853,14 @@ public class ElMessHallPlugin extends Plugin
 
 	private void addCheese(){
 		if(client.getWidget(242,1)!=null && !client.getWidget(242,1).isHidden()){
-			targetMenu=new MenuEntry("","",1,57,11,15859713,false);
+			targetMenu=new LegacyMenuEntry("","",1,57,11,15859713,false);
 			utils.delayMouseClick(client.getWidget(242,1).getChild(11).getBounds(),0);
 			clientTickDelay=25;
 		} else if(utils.inventoryContains(13406)){
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(14);
 			client.setSelectedItemID(13406);
-			targetMenu = new MenuEntry("","",13407,31,27,9764864,false);
+			targetMenu = new LegacyMenuEntry("","",13407,31,27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13407).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -877,7 +878,7 @@ public class ElMessHallPlugin extends Plugin
 					client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 					client.setSelectedItemSlot(14);
 					client.setSelectedItemID(13408);
-					targetMenu = new MenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 				}
 			}
@@ -894,12 +895,12 @@ public class ElMessHallPlugin extends Plugin
 				client.runScript(681);
 				client.runScript(ScriptID.MESSAGE_LAYER_CLOSE);
 			}else if(client.getWidget(242,3)!=null&&!client.getWidget(242,3).isHidden()){
-				targetMenu=new MenuEntry("","",5,57,1,15859715,false);
+				targetMenu=new LegacyMenuEntry("","",5,57,1,15859715,false);
 				utils.delayMouseClick(client.getWidget(242,3).getChild(1).getBounds(),sleepDelay());
 			}else{
 				targetObject=utils.findNearestGameObject(27375);
 				if(targetObject!=null){
-					targetMenu=new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),sleepDelay());
 				}
 				timeout++;
@@ -911,14 +912,14 @@ public class ElMessHallPlugin extends Plugin
 
 	private void cutPineapples(){
 		if(client.getWidget(242,1)!=null && !client.getWidget(242,1).isHidden()){
-			targetMenu=new MenuEntry("","",1,57,11,15859713,false);
+			targetMenu=new LegacyMenuEntry("","",1,57,11,15859713,false);
 			utils.delayMouseClick(client.getWidget(242,1).getChild(11).getBounds(),0);
 			clientTickDelay=25;
 		} else if(utils.inventoryContains(13410)){
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(1);
 			client.setSelectedItemID(946);
-			targetMenu = new MenuEntry("","",13410,31,27,9764864,false);
+			targetMenu = new LegacyMenuEntry("","",13410,31,27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13410).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -931,7 +932,7 @@ public class ElMessHallPlugin extends Plugin
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(14);
 			client.setSelectedItemID(13409);
-			targetMenu = new MenuEntry("","",13411,31,27,9764864,false);
+			targetMenu = new LegacyMenuEntry("","",13411,31,27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13411).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -944,7 +945,7 @@ public class ElMessHallPlugin extends Plugin
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(13);
 			client.setSelectedItemID(13398);
-			targetMenu = new MenuEntry("","",13400,31,27,9764864,false);
+			targetMenu = new LegacyMenuEntry("","",13400,31,27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13400).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -956,7 +957,7 @@ public class ElMessHallPlugin extends Plugin
 		if(utils.inventoryContains(13412)){
 			targetObject=utils.findNearestGameObject(27378);
 			if(targetObject!=null){
-				targetMenu=new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+				targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 			}
 		} else {
@@ -974,7 +975,7 @@ public class ElMessHallPlugin extends Plugin
 			} else {
 				targetObject = utils.findNearestGameObject(27377);
 				if(targetObject!=null){
-					targetMenu = new MenuEntry("","",targetObject.getId(),4,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),4,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 				}
 			}
@@ -993,7 +994,7 @@ public class ElMessHallPlugin extends Plugin
 					client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 					client.setSelectedItemSlot(27);
 					client.setSelectedItemID(13399);
-					targetMenu = new MenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 				}
 			}
@@ -1007,7 +1008,7 @@ public class ElMessHallPlugin extends Plugin
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(13);
 			client.setSelectedItemID(13401);
-			targetMenu = new MenuEntry("","",13413,31,27,9764864,false);
+			targetMenu = new LegacyMenuEntry("","",13413,31,27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13413).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -1026,7 +1027,7 @@ public class ElMessHallPlugin extends Plugin
 					client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 					client.setSelectedItemSlot(0);
 					client.setSelectedItemID(13402);
-					targetMenu = new MenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 				}
 			}
@@ -1039,7 +1040,7 @@ public class ElMessHallPlugin extends Plugin
 		if(utils.inventoryContains(13403)){
 			targetObject=utils.findNearestGameObject(27378);
 			if(targetObject!=null){
-				targetMenu=new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+				targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 			}
 		} else {
@@ -1052,7 +1053,7 @@ public class ElMessHallPlugin extends Plugin
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(13);
 			client.setSelectedItemID(1921);
-			targetMenu = new MenuEntry("","",13413,31,27,9764864,false);
+			targetMenu = new LegacyMenuEntry("","",13413,31,27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13413).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -1065,7 +1066,7 @@ public class ElMessHallPlugin extends Plugin
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(13);
 			client.setSelectedItemID(13416);
-			targetMenu = new MenuEntry("","",13414,31,27,9764864,false);
+			targetMenu = new LegacyMenuEntry("","",13414,31,27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13414).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -1084,7 +1085,7 @@ public class ElMessHallPlugin extends Plugin
 					client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 					client.setSelectedItemSlot(0);
 					client.setSelectedItemID(13417);
-					targetMenu = new MenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 				}
 			}
@@ -1097,7 +1098,7 @@ public class ElMessHallPlugin extends Plugin
 		if(utils.inventoryContains(13418)){
 			targetObject=utils.findNearestGameObject(27378);
 			if(targetObject!=null){
-				targetMenu=new MenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+				targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 			}
 		} else {

@@ -3,59 +3,28 @@ package net.runelite.client.plugins.elbreakhandler.ui.utils;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.primitives.Ints;
-import net.runelite.client.plugins.elbreakhandler.ElBreakHandlerPlugin;
-import static net.runelite.client.plugins.elbreakhandler.ui.ElBreakHandlerPanel.PANEL_BACKGROUND_COLOR;
 import io.reactivex.rxjava3.disposables.Disposable;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ItemEvent;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Stack;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-import javax.inject.Inject;
-import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.border.EmptyBorder;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.client.config.Alpha;
-import net.runelite.client.config.Config;
-import net.runelite.client.config.ConfigDescriptor;
-import net.runelite.client.config.ConfigGroup;
-import net.runelite.client.config.ConfigItem;
-import net.runelite.client.config.ConfigItemDescriptor;
-import net.runelite.client.config.ConfigManager;
-import net.runelite.client.config.ConfigObject;
-import net.runelite.client.config.ConfigSection;
-import net.runelite.client.config.ConfigSectionDescriptor;
-import net.runelite.client.config.ConfigTitle;
-import net.runelite.client.config.ConfigTitleDescriptor;
-import net.runelite.client.config.Range;
-import net.runelite.client.config.Units;
+import net.runelite.client.config.*;
+import net.runelite.client.plugins.elbreakhandler.ElBreakHandlerPlugin;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.DynamicGridLayout;
 import net.runelite.client.ui.FontManager;
-import static net.runelite.client.ui.PluginPanel.PANEL_WIDTH;
 import net.runelite.client.ui.components.ComboBoxListRenderer;
 import net.runelite.client.util.Text;
+
+import javax.inject.Inject;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static net.runelite.client.plugins.elbreakhandler.ui.ElBreakHandlerPanel.PANEL_BACKGROUND_COLOR;
+import static net.runelite.client.ui.PluginPanel.PANEL_WIDTH;
 
 @Slf4j
 public class ConfigPanel extends FixedWidthPanel
@@ -217,7 +186,7 @@ public class ConfigPanel extends FixedWidthPanel
 				item.add(spinner, BorderLayout.EAST);
 			}
 
-			if (cid.getType().isEnum())
+			if (cid.getType() instanceof Class && ((Class<?>) cid.getType()).isEnum())
 			{
 				Class<? extends Enum> type = (Class<? extends Enum>) cid.getType();
 
@@ -320,7 +289,7 @@ public class ConfigPanel extends FixedWidthPanel
 					{
 						show = Boolean.parseBoolean(configManager.getConfiguration(cd.getGroup().value(), cid2.getItem().keyName()));
 					}
-					else if (cid2.getType().isEnum())
+					else if (cid2.getType() instanceof Class && ((Class<?>) cid2.getType()).isEnum())
 					{
 						Class<? extends Enum> type = (Class<? extends Enum>) cid2.getType();
 						try

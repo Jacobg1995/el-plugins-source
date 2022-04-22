@@ -26,16 +26,16 @@
 package net.runelite.client.plugins.elairs;
 
 import com.google.inject.Provides;
-import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
-import java.awt.Rectangle;
-import java.time.Instant;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Point;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.events.*;
+import net.runelite.api.events.ConfigButtonClicked;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -43,12 +43,19 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
 import net.runelite.client.plugins.elutils.ElUtils;
+import net.runelite.client.plugins.elutils.LegacyMenuEntry;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
 
+import javax.inject.Inject;
+import java.awt.*;
+import java.time.Instant;
+
 import static net.runelite.client.plugins.elairs.ElAirsState.*;
-import static net.runelite.client.plugins.elairs.ElAirsType.*;
+import static net.runelite.client.plugins.elairs.ElAirsType.RUNES;
+import static net.runelite.client.plugins.elairs.ElAirsType.TIARAS;
 
 
 @Extension
@@ -87,7 +94,7 @@ public class ElAirsPlugin extends Plugin
 	ElAirsState state;
 	GameObject targetObject;
 	NPC targetNPC;
-	MenuEntry targetMenu;
+	LegacyMenuEntry targetMenu;
 	WorldPoint skillLocation;
 	Instant botTimer;
 	LocalPoint beforeLoc;
@@ -308,7 +315,7 @@ public class ElAirsPlugin extends Plugin
 					if(config.useStams()) {
 						if (client.getVar(Varbits.RUN_SLOWED_DEPLETION_ACTIVE) == 0 && checkRunEnergy() < config.minEnergy()) {
 							if (utils.inventoryContains(12631)) {
-								targetMenu = new MenuEntry("Drink", "<col=ff9040>Stamina potion(1)</col>", 9, 1007, utils.getInventoryWidgetItem(12631).getIndex(), 983043, false);
+								targetMenu = new LegacyMenuEntry("Drink", "<col=ff9040>Stamina potion(1)</col>", 9, 1007, utils.getInventoryWidgetItem(12631).getIndex(), 983043, false);
 								utils.delayMouseClick(utils.getInventoryWidgetItem(12631).getCanvasBounds(), sleepDelay());
 								return;
 							} else {
@@ -316,14 +323,14 @@ public class ElAirsPlugin extends Plugin
 									utils.depositAll();
 									return;
 								} else {
-									targetMenu = new MenuEntry("Withdraw-1", "<col=ff9040>Stamina potion(1)</col>", 1, 57, utils.getBankItemWidget(12631).getIndex(), 786444, false);
+									targetMenu = new LegacyMenuEntry("Withdraw-1", "<col=ff9040>Stamina potion(1)</col>", 1, 57, utils.getBankItemWidget(12631).getIndex(), 786444, false);
 									utils.delayMouseClick(utils.getBankItemWidget(12631).getBounds(), sleepDelay());
 									return;
 								}
 							}
 						} else if (checkRunEnergy() < config.minEnergyStam()) {
 							if (utils.inventoryContains(12631)) {
-								targetMenu = new MenuEntry("Drink", "<col=ff9040>Stamina potion(1)</col>", 9, 1007, utils.getInventoryWidgetItem(12631).getIndex(), 983043, false);
+								targetMenu = new LegacyMenuEntry("Drink", "<col=ff9040>Stamina potion(1)</col>", 9, 1007, utils.getInventoryWidgetItem(12631).getIndex(), 983043, false);
 								utils.delayMouseClick(utils.getInventoryWidgetItem(12631).getCanvasBounds(), sleepDelay());
 								return;
 							} else {
@@ -331,7 +338,7 @@ public class ElAirsPlugin extends Plugin
 									utils.depositAll();
 									return;
 								} else {
-									targetMenu = new MenuEntry("Withdraw-1", "<col=ff9040>Stamina potion(1)</col>", 1, 57, utils.getBankItemWidget(12631).getIndex(), 786444, false);
+									targetMenu = new LegacyMenuEntry("Withdraw-1", "<col=ff9040>Stamina potion(1)</col>", 1, 57, utils.getBankItemWidget(12631).getIndex(), 786444, false);
 									utils.delayMouseClick(utils.getBankItemWidget(12631).getBounds(), sleepDelay());
 									return;
 								}
@@ -456,12 +463,12 @@ public class ElAirsPlugin extends Plugin
 		}
 	}
 
-	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, MenuAction menuAction, int param0, int param1)
+	public void menuAction(MenuOptionClicked menuOptionClicked, String option, String target, int identifier, int menuAction, int param0, int param1)
 	{
 		menuOptionClicked.setMenuOption(option);
 		menuOptionClicked.setMenuTarget(target);
 		menuOptionClicked.setId(identifier);
-		menuOptionClicked.setMenuAction(menuAction);
+		menuOptionClicked.setMenuAction(MenuAction.of(menuAction));
 		menuOptionClicked.setActionParam(param0);
 		menuOptionClicked.setWidgetId(param1);
 	}
@@ -473,7 +480,7 @@ public class ElAirsPlugin extends Plugin
 			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
 			client.setSelectedItemSlot(utils.getInventoryWidgetItem(1438).getIndex());
 			client.setSelectedItemID(1438);
-			targetMenu = new MenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 			//utils.setMenuEntry(targetMenu);
 			if(targetObject.getConvexHull()!=null){
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(),sleepDelay());
@@ -488,7 +495,7 @@ public class ElAirsPlugin extends Plugin
 	{
 		targetObject = utils.findNearestGameObject(id);
 		if(targetObject!=null){
-			targetMenu = new MenuEntry("","",targetObject.getId(),opcode,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),opcode,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 			//utils.setMenuEntry(targetMenu);
 			if(targetObject.getConvexHull()!=null){
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(),sleepDelay());
@@ -500,7 +507,7 @@ public class ElAirsPlugin extends Plugin
 
 	private void depositItem(int id)
 	{
-		targetMenu = new MenuEntry("", "", 8, 57, utils.getInventoryWidgetItem(id).getIndex(),983043,false);
+		targetMenu = new LegacyMenuEntry("", "", 8, 57, utils.getInventoryWidgetItem(id).getIndex(),983043,false);
 		//utils.setMenuEntry(targetMenu);
 		utils.delayMouseClick(utils.getInventoryWidgetItem(id).getCanvasBounds(),sleepDelay());
 	}
@@ -510,7 +517,7 @@ public class ElAirsPlugin extends Plugin
 			utils.withdrawItemAmount(ID,14);
 			timeout+=3;
 		} else {
-			targetMenu = new MenuEntry("", "", (client.getVarbitValue(6590) == 3) ? 1 : 5, MenuAction.CC_OP.getId(), utils.getBankItemWidget(ID).getIndex(), 786444, false);
+			targetMenu = new LegacyMenuEntry("", "", (client.getVarbitValue(6590) == 3) ? 1 : 5, MenuAction.CC_OP.getId(), utils.getBankItemWidget(ID).getIndex(), 786444, false);
 			//utils.setMenuEntry(targetMenu);
 			clickBounds = utils.getBankItemWidget(ID).getBounds()!=null ? utils.getBankItemWidget(ID).getBounds() : new Rectangle(client.getCenterX() - 50, client.getCenterY() - 50, 100, 100);
 			utils.delayMouseClick(clickBounds,sleepDelay());

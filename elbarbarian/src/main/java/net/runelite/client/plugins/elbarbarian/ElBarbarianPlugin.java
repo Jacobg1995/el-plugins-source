@@ -26,16 +26,15 @@
 package net.runelite.client.plugins.elbarbarian;
 
 import com.google.inject.Provides;
-import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
-import java.awt.Rectangle;
-import java.time.Instant;
-import java.util.*;
-import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Point;
 import net.runelite.api.*;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
-import net.runelite.api.events.*;
+import net.runelite.api.events.ConfigButtonClicked;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.GameTick;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -43,9 +42,19 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginManager;
+import net.runelite.client.plugins.elbreakhandler.ElBreakHandler;
 import net.runelite.client.plugins.elutils.ElUtils;
+import net.runelite.client.plugins.elutils.LegacyMenuEntry;
 import net.runelite.client.ui.overlay.OverlayManager;
 import org.pf4j.Extension;
+
+import javax.inject.Inject;
+import java.awt.*;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import static net.runelite.client.plugins.elbarbarian.ElBarbarianState.*;
 
@@ -89,7 +98,7 @@ public class ElBarbarianPlugin extends Plugin
 	ElBarbarianState state;
 	GameObject targetObject;
 	NPC targetNPC;
-	MenuEntry targetMenu;
+	LegacyMenuEntry targetMenu;
 	WorldPoint skillLocation;
 	Instant botTimer;
 	LocalPoint beforeLoc;
@@ -209,7 +218,7 @@ public class ElBarbarianPlugin extends Plugin
 		targetNPC = utils.findNearestNpcWithin(player.getWorldLocation(), 10, Collections.singleton(1526));
 		if (targetNPC != null)
 		{
-			targetMenu = new MenuEntry("", "", targetNPC.getIndex(), 9, 0, 0, false);
+			targetMenu = new LegacyMenuEntry("", "", targetNPC.getIndex(), 9, 0, 0, false);
 			utils.setMenuEntry(targetMenu);
 			utils.delayMouseClick(targetNPC.getConvexHull().getBounds(), sleepDelay());
 		}
@@ -221,9 +230,9 @@ public class ElBarbarianPlugin extends Plugin
 
 	private void interactFire(int fishId)
 	{
-		targetObject = utils.findNearestGameObjectWithin(player.getWorldLocation(),10,26185);
+		targetObject = utils.findNearestGameObjectWithin(player.getWorldLocation(),10,43475);
 		if(targetObject!=null){
-			targetMenu = new MenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 			utils.setModifiedMenuEntry(targetMenu,fishId,utils.getInventoryWidgetItem(fishId).getIndex(),1);
 			if(targetObject.getConvexHull()!=null) {
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
@@ -237,7 +246,7 @@ public class ElBarbarianPlugin extends Plugin
 
 	private void completeCookingMenu()
 	{
-		targetMenu = new MenuEntry("","",1,57,-1,17694734,false);
+		targetMenu = new LegacyMenuEntry("","",1,57,-1,17694734,false);
 		utils.setMenuEntry(targetMenu);
 		utils.delayMouseClick(client.getWidget(270,14).getBounds(), sleepDelay());
 	}

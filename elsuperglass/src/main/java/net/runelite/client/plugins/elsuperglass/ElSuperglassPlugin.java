@@ -4,11 +4,11 @@ import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Point;
 import net.runelite.api.*;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ClientTick;
 import net.runelite.api.events.ConfigButtonClicked;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.queries.GameObjectQuery;
-import net.runelite.api.queries.TileQuery;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.ConfigChanged;
@@ -172,7 +172,7 @@ public class ElSuperglassPlugin extends Plugin
 				break;
 			case "DEPOSITING_FULL_INVENTORY":
 				if(utils.isBankOpen()){
-					client.invokeMenuAction("Deposit inventory","",1,57,-1,786473);
+					client.invokeMenuAction("Deposit inventory","",1,57,-1,786474);
 					utils.pressKey(27);
 					tickTimer+=tickDelay();
 				} else {
@@ -181,7 +181,7 @@ public class ElSuperglassPlugin extends Plugin
 				}
 				break;
 			case  "CASTING_SUPERGLASS_MAKE":
-				client.invokeMenuAction("Cast", "<col=00ff00>Superglass Make</col>",1,57,-1,14286965);
+				client.invokeMenuAction("Cast", "<col=00ff00>Superglass Make</col>",1,57,-1,14286966);
 				tickTimer+=3+tickDelay();
 				break;
 			case "BANKING_FOR_SUPPLIES":
@@ -215,18 +215,18 @@ public class ElSuperglassPlugin extends Plugin
 
 		if(utils.isBankOpen()){
 			if(withdrawClickCount==0){
-				client.invokeMenuAction("Deposit inventory","",1,57,-1,786473);
+				client.invokeMenuAction("Deposit inventory","",1,57,-1,786474);
 				withdrawClickCount++;
 				return;
 			} else if(withdrawClickCount>0 && withdrawClickCount<4) {
 				if (utils.bankContains("Giant seaweed")) {
-					client.invokeMenuAction("Withdraw-1", "Withdraw-1", 1, 57, utils.getBankItemWidget(21504).getIndex(), 786444);
+					client.invokeMenuAction("Withdraw-1", "Withdraw-1", 1, 57, utils.getBankItemWidget(21504).getIndex(), 786445);
 					withdrawClickCount++;
 					return;
 				}
 			} else if(withdrawClickCount==4) {
 				if (utils.bankContains("Bucket of sand")) {
-					client.invokeMenuAction("Withdraw-18", "<col=ff9040>Bucket of sand</col>", 5, 57, utils.getBankItemWidget(1783).getIndex(), 786444);
+					client.invokeMenuAction("Withdraw-18", "<col=ff9040>Bucket of sand</col>", 5, 57, utils.getBankItemWidget(1783).getIndex(), 786445);
 					withdrawClickCount++;
 					return;
 				}
@@ -278,14 +278,9 @@ public class ElSuperglassPlugin extends Plugin
 	private boolean groundItemsUnderneathPlayer()
 	{
 		log.info("groundItemsUnderneathPlayer called.");
-		for(Tile tile : new TileQuery().isWithinDistance(client.getLocalPlayer().getWorldLocation(),0).result(client)) {
-			if(tile.getGroundItems()!=null){
-				for(TileItem tileItem : tile.getGroundItems()){
-					if(tileItem.getId()==1775){
-						return true;
-					}
-				}
-			}
+		if(getGroundItemAtWorldLoc(client.getLocalPlayer().getWorldLocation(),1775)!=null){
+			log.info("found items");
+			return true;
 		}
 		return false;
 	}
@@ -293,16 +288,48 @@ public class ElSuperglassPlugin extends Plugin
 	private void getGlassUnderneathPlayer()
 	{
 		log.info("getGlassUnderneathPlayer called.");
-		for(Tile tile : new TileQuery().isWithinDistance(client.getLocalPlayer().getWorldLocation(),0).result(client)) {
-			if(tile.getGroundItems()!=null){
-				for(TileItem tileItem : tile.getGroundItems()){
-					if(tileItem.getId()==1775){
-						client.invokeMenuAction("Take", "<col=ff9040>Molten glass",1775,20,client.getLocalPlayer().getLocalLocation().getSceneX(),client.getLocalPlayer().getLocalLocation().getSceneY());
-						return;
+		if(getGroundItemAtWorldLoc(client.getLocalPlayer().getWorldLocation(),1775)!=null){
+			client.invokeMenuAction("Take", "<col=ff9040>Molten glass",1775,20,client.getLocalPlayer().getLocalLocation().getSceneX(),client.getLocalPlayer().getLocalLocation().getSceneY());
+		}
+	}
+
+	public TileItem getGroundItemAtWorldLoc(WorldPoint worldPoint, int id) {
+		Scene scene = client.getScene();
+		Tile[][][] tiles = scene.getTiles();
+
+		int z = client.getPlane();
+
+		for (int x = 0; x < Constants.SCENE_SIZE; ++x) {
+			for (int y = 0; y < Constants.SCENE_SIZE; ++y) {
+				Tile tile = tiles[z][x][y];
+
+				if (tile == null) {
+					continue;
+				}
+				Player player = client.getLocalPlayer();
+				if (player == null) {
+					continue;
+				}
+				TileItem tileItem = findItemAtTile(tile, id);
+				if (tileItem != null) {
+					if(tile.getWorldLocation().equals(worldPoint)){
+						return tileItem;
 					}
 				}
 			}
 		}
+		return null;
+	}
+
+	private TileItem findItemAtTile(Tile tile, int id) {
+		ItemLayer tileItemPile = tile.getItemLayer();
+		if (tileItemPile != null) {
+			TileItem tileItem = (TileItem) tileItemPile.getBottom();
+			if (tileItem.getId() == id) {
+				return tileItem;
+			}
+		}
+		return null;
 	}
 
 	private void openNearestBank()
