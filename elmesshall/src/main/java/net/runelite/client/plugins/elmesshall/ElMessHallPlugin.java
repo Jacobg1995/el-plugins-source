@@ -382,7 +382,7 @@ public class ElMessHallPlugin extends Plugin
 					break;
 				case FIXING_TAB:
 					if(client.getWidget(161,64)!=null && !client.getWidget(161,64).isHidden()){
-						targetMenu=new LegacyMenuEntry("","",1,57,-1,10551354,false);
+						targetMenu=new LegacyMenuEntry("","",1,57,-1,10551357,false);
 						utils.delayMouseClick(client.getWidget(161,64).getBounds(),sleepDelay());
 						timeout = 1+tickDelay();
 					}
@@ -616,7 +616,7 @@ public class ElMessHallPlugin extends Plugin
 			return;
 		}
 		if(!utils.inventoryItemContainsAmount(13397,amount,false,true)){
-			if(client.getWidget(162,45)!=null&&!client.getWidget(162,45).isHidden()){
+			if(client.getWidget(162,42)!=null&&!client.getWidget(162,42).isHidden()){
 				client.setVar(VarClientInt.INPUT_TYPE,7);
 				client.setVar(VarClientStr.INPUT_TEXT,String.valueOf(amount-utils.getInventoryItemCount(1923,false)));
 				client.runScript(681);
@@ -654,7 +654,7 @@ public class ElMessHallPlugin extends Plugin
 			return;
 		}
 		if(!utils.inventoryItemContainsAmount(13414,amount,false,true)){
-			if(client.getWidget(162,45)!=null&&!client.getWidget(162,45).isHidden()){
+			if(client.getWidget(162,42)!=null&&!client.getWidget(162,42).isHidden()){
 				client.setVar(VarClientInt.INPUT_TYPE,7);
 				client.setVar(VarClientStr.INPUT_TEXT,String.valueOf(amount-utils.getInventoryItemCount(13414,false)));
 				client.runScript(681);
@@ -677,7 +677,7 @@ public class ElMessHallPlugin extends Plugin
 
 	private void getBowls(int amount){
 		if(!utils.inventoryItemContainsAmount(1923,amount,false,true)) {
-			if (client.getWidget(162, 45) != null && !client.getWidget(162, 45).isHidden()) {
+			if (client.getWidget(162, 42) != null && !client.getWidget(162, 42).isHidden()) {
 				client.setVar(VarClientInt.INPUT_TYPE, 7);
 				client.setVar(VarClientStr.INPUT_TEXT, String.valueOf(amount - utils.getInventoryItemCount(1923, false)));
 				client.runScript(681);
@@ -705,7 +705,7 @@ public class ElMessHallPlugin extends Plugin
 
 	private void getDish(int amount){
 		if(!utils.inventoryItemContainsAmount(13400,amount,false,true)) {
-			if (client.getWidget(162, 45) != null && !client.getWidget(162, 45).isHidden()) {
+			if (client.getWidget(162, 42) != null && !client.getWidget(162, 42).isHidden()) {
 				client.setVar(VarClientInt.INPUT_TYPE, 7);
 				client.setVar(VarClientStr.INPUT_TEXT, String.valueOf(amount - utils.getInventoryItemCount(13400, false)));
 				client.runScript(681);
@@ -735,10 +735,10 @@ public class ElMessHallPlugin extends Plugin
 		if(utils.inventoryContains(1923)){
 			targetObject = utils.findNearestGameObject(9684);
 			if(targetObject!=null){
-				client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-				client.setSelectedItemSlot(utils.getInventoryWidgetItem(1923).getIndex());
-				client.setSelectedItemID(1923);
-				targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+				client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+				client.setSelectedSpellChildIndex(utils.getInventoryWidgetItem(1923).getIndex());
+				client.setSelectedSpellItemId(1923);
+				targetMenu = new LegacyMenuEntry("","",targetObject.getId(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 			}
 		} else {
@@ -748,10 +748,10 @@ public class ElMessHallPlugin extends Plugin
 
 	private void makeDough(){
 		if(utils.inventoryContains(13397)){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(14);
-			client.setSelectedItemID(13397);
-			targetMenu = new LegacyMenuEntry("","",1921,31,27,9764864,false);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(14);
+			client.setSelectedSpellItemId(13397);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(), 27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(1921).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -761,10 +761,10 @@ public class ElMessHallPlugin extends Plugin
 
 	private void makePastryDough(){
 		if(utils.inventoryContains(13397)){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(13);
-			client.setSelectedItemID(13397);
-			targetMenu = new LegacyMenuEntry("","",1921,31,27,9764864,false);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(13);
+			client.setSelectedSpellItemId(13397);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(),27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(1921).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -776,10 +776,10 @@ public class ElMessHallPlugin extends Plugin
 		if(utils.inventoryContains(1923)){
 			targetObject=utils.findNearestGameObject(27376);
 			if(targetObject!=null){
-				client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-				client.setSelectedItemSlot(utils.getInventoryWidgetItem(1923).getIndex());
-				client.setSelectedItemID(1923);
-				targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+				client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+				client.setSelectedSpellChildIndex(utils.getInventoryWidgetItem(1923).getIndex());
+				client.setSelectedSpellItemId(1923);
+				targetMenu = new LegacyMenuEntry("","",targetObject.getId(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(),sleepDelay());
 			}
 		} else {
@@ -790,7 +790,7 @@ public class ElMessHallPlugin extends Plugin
 
 	private void getTomatoes(){
 		if(!utils.inventoryItemContainsAmount(13405,13,false,true)){
-			if(client.getWidget(162,45)!=null&&!client.getWidget(162,45).isHidden()){
+			if(client.getWidget(162,42)!=null&&!client.getWidget(162,42).isHidden()){
 				client.setVar(VarClientInt.INPUT_TYPE,7);
 				client.setVar(VarClientStr.INPUT_TEXT,String.valueOf(13-utils.getInventoryItemCount(13405,false)));
 				client.runScript(681);
@@ -817,10 +817,10 @@ public class ElMessHallPlugin extends Plugin
 			utils.delayMouseClick(client.getWidget(242,1).getChild(11).getBounds(),0);
 			clientTickDelay=25;
 		} else if(utils.inventoryContains(13405)){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(14);
-			client.setSelectedItemID(13404);
-			targetMenu = new LegacyMenuEntry("","",13405,31,27,9764864,false);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(14);
+			client.setSelectedSpellItemId(13404);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(),27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13405).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -830,7 +830,7 @@ public class ElMessHallPlugin extends Plugin
 
 	private void getCheese(){
 		if(!utils.inventoryItemContainsAmount(13407,13,false,true)){
-			if(client.getWidget(162,45)!=null&&!client.getWidget(162,45).isHidden()){
+			if(client.getWidget(162,42)!=null&&!client.getWidget(162,42).isHidden()){
 				client.setVar(VarClientInt.INPUT_TYPE,7);
 				client.setVar(VarClientStr.INPUT_TEXT,String.valueOf(13-utils.getInventoryItemCount(13407,false)));
 				client.runScript(681);
@@ -857,10 +857,10 @@ public class ElMessHallPlugin extends Plugin
 			utils.delayMouseClick(client.getWidget(242,1).getChild(11).getBounds(),0);
 			clientTickDelay=25;
 		} else if(utils.inventoryContains(13406)){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(14);
-			client.setSelectedItemID(13406);
-			targetMenu = new LegacyMenuEntry("","",13407,31,27,9764864,false);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(14);
+			client.setSelectedSpellItemId(13406);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(),27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13407).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -875,10 +875,10 @@ public class ElMessHallPlugin extends Plugin
 			} else {
 				targetObject=utils.findNearestGameObject(21302);
 				if(targetObject!=null){
-					client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-					client.setSelectedItemSlot(14);
-					client.setSelectedItemID(13408);
-					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+					client.setSelectedSpellChildIndex(14);
+					client.setSelectedSpellItemId(13408);
+					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 				}
 			}
@@ -889,7 +889,7 @@ public class ElMessHallPlugin extends Plugin
 
 	private void getPineapples(){
 		if(!utils.inventoryItemContainsAmount(13410,13,false,true)){
-			if(client.getWidget(162,45)!=null&&!client.getWidget(162,45).isHidden()){
+			if(client.getWidget(162,42)!=null&&!client.getWidget(162,42).isHidden()){
 				client.setVar(VarClientInt.INPUT_TYPE,7);
 				client.setVar(VarClientStr.INPUT_TEXT,String.valueOf(13-utils.getInventoryItemCount(13407,false)));
 				client.runScript(681);
@@ -916,10 +916,10 @@ public class ElMessHallPlugin extends Plugin
 			utils.delayMouseClick(client.getWidget(242,1).getChild(11).getBounds(),0);
 			clientTickDelay=25;
 		} else if(utils.inventoryContains(13410)){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(1);
-			client.setSelectedItemID(946);
-			targetMenu = new LegacyMenuEntry("","",13410,31,27,9764864,false);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(1);
+			client.setSelectedSpellItemId(946);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(),27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13410).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -929,10 +929,10 @@ public class ElMessHallPlugin extends Plugin
 
 	private void addPineapples(){
 		if(utils.inventoryContains(13409)){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(14);
-			client.setSelectedItemID(13409);
-			targetMenu = new LegacyMenuEntry("","",13411,31,27,9764864,false);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(14);
+			client.setSelectedSpellItemId(13409);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(),27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13411).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -942,10 +942,10 @@ public class ElMessHallPlugin extends Plugin
 
 	private void makePieShell(){
 		if(utils.inventoryContains(13398)){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(13);
-			client.setSelectedItemID(13398);
-			targetMenu = new LegacyMenuEntry("","",13400,31,27,9764864,false);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(13);
+			client.setSelectedSpellItemId(13398);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(),27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13400).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -957,7 +957,7 @@ public class ElMessHallPlugin extends Plugin
 		if(utils.inventoryContains(13412)){
 			targetObject=utils.findNearestGameObject(27378);
 			if(targetObject!=null){
-				targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+				targetMenu=new LegacyMenuEntry("","",targetObject.getId(),MenuAction.GAME_OBJECT_FIRST_OPTION.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 			}
 		} else {
@@ -967,7 +967,7 @@ public class ElMessHallPlugin extends Plugin
 
 	private void getRawMeat(){
 		if(!utils.inventoryContains(13399)){
-			if (client.getWidget(162, 45) != null && !client.getWidget(162, 45).isHidden()) {
+			if (client.getWidget(162, 42) != null && !client.getWidget(162, 42).isHidden()) {
 				client.setVar(VarClientInt.INPUT_TYPE, 7);
 				client.setVar(VarClientStr.INPUT_TEXT, String.valueOf(14 - utils.getInventoryItemCount(13399, false)));
 				client.runScript(681);
@@ -991,10 +991,10 @@ public class ElMessHallPlugin extends Plugin
 			} else {
 				targetObject=utils.findNearestGameObject(21302);
 				if(targetObject!=null){
-					client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-					client.setSelectedItemSlot(27);
-					client.setSelectedItemID(13399);
-					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+					client.setSelectedSpellChildIndex(27);
+					client.setSelectedSpellItemId(13399);
+					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 				}
 			}
@@ -1005,10 +1005,10 @@ public class ElMessHallPlugin extends Plugin
 
 	private void makeUncookedPies(){
 		if(utils.inventoryContains(13413)){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(13);
-			client.setSelectedItemID(13401);
-			targetMenu = new LegacyMenuEntry("","",13413,31,27,9764864,false);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(13);
+			client.setSelectedSpellItemId(13401);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(),27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13413).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -1024,10 +1024,10 @@ public class ElMessHallPlugin extends Plugin
 			} else {
 				targetObject=utils.findNearestGameObject(21302);
 				if(targetObject!=null){
-					client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-					client.setSelectedItemSlot(0);
-					client.setSelectedItemID(13402);
-					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+					client.setSelectedSpellChildIndex(0);
+					client.setSelectedSpellItemId(13402);
+					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 				}
 			}
@@ -1040,7 +1040,7 @@ public class ElMessHallPlugin extends Plugin
 		if(utils.inventoryContains(13403)){
 			targetObject=utils.findNearestGameObject(27378);
 			if(targetObject!=null){
-				targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+				targetMenu=new LegacyMenuEntry("","",targetObject.getId(),MenuAction.GAME_OBJECT_FIRST_OPTION.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 			}
 		} else {
@@ -1050,10 +1050,10 @@ public class ElMessHallPlugin extends Plugin
 
 	private void makeIncompleteStews(){
 		if(utils.inventoryContains(13413)){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(13);
-			client.setSelectedItemID(1921);
-			targetMenu = new LegacyMenuEntry("","",13413,31,27,9764864,false);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(13);
+			client.setSelectedSpellItemId(1921);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(),27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13413).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -1063,10 +1063,10 @@ public class ElMessHallPlugin extends Plugin
 
 	private void makeUncookedStews(){
 		if(utils.inventoryContains(13414)){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(13);
-			client.setSelectedItemID(13416);
-			targetMenu = new LegacyMenuEntry("","",13414,31,27,9764864,false);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(13);
+			client.setSelectedSpellItemId(13416);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(),27,9764864,false);
 			utils.delayMouseClick(utils.getInventoryWidgetItem(13414).getCanvasBounds(),0);
 			clientTickDelay=15;
 		} else {
@@ -1082,10 +1082,10 @@ public class ElMessHallPlugin extends Plugin
 			} else {
 				targetObject=utils.findNearestGameObject(21302);
 				if(targetObject!=null){
-					client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-					client.setSelectedItemSlot(0);
-					client.setSelectedItemID(13417);
-					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+					client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+					client.setSelectedSpellChildIndex(0);
+					client.setSelectedSpellItemId(13417);
+					targetMenu = new LegacyMenuEntry("","",targetObject.getId(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 					utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 				}
 			}
@@ -1098,7 +1098,7 @@ public class ElMessHallPlugin extends Plugin
 		if(utils.inventoryContains(13418)){
 			targetObject=utils.findNearestGameObject(27378);
 			if(targetObject!=null){
-				targetMenu=new LegacyMenuEntry("","",targetObject.getId(),3,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+				targetMenu=new LegacyMenuEntry("","",targetObject.getId(),MenuAction.GAME_OBJECT_FIRST_OPTION.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(),0);
 			}
 		} else {

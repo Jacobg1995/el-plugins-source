@@ -1350,12 +1350,13 @@ public class ElUtils extends Plugin
 	}
 
 	public Collection<WidgetItem> getInventoryWidgetItems() {
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
+
 		if (inventoryWidget == null) {
 			return new ArrayList<>();
 		}
 
-		Widget[] children = inventoryWidget.getChildren();
+		Widget[] children = inventoryWidget.getDynamicChildren();
 
 		if (children == null) {
 			return new ArrayList<>();
@@ -1367,7 +1368,6 @@ public class ElUtils extends Plugin
 				widgetItems.add(createWidgetItem(item));
 			}
 		}
-
 		return widgetItems;
 	}
 
@@ -1376,13 +1376,13 @@ public class ElUtils extends Plugin
 	}
 
 	public WidgetItem getInventoryItem(int... ids) {
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 
 		if (inventoryWidget == null) {
 			return null;
 		}
 
-		Widget[] children = inventoryWidget.getChildren();
+		Widget[] children = inventoryWidget.getDynamicChildren();
 
 		if (children == null) {
 			return null;
@@ -1409,7 +1409,8 @@ public class ElUtils extends Plugin
 
 	public int getInventorySpace()
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
 			return 28 - getInventoryWidgetItems().size();
@@ -1422,7 +1423,7 @@ public class ElUtils extends Plugin
 
 	public List<WidgetItem> getInventoryItems(Collection<Integer> ids)
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		List<WidgetItem> matchedItems = new ArrayList<>();
 
 		if (inventoryWidget != null)
@@ -1454,7 +1455,7 @@ public class ElUtils extends Plugin
 
 	public Collection<WidgetItem> getAllInventoryItems()
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
 			return getInventoryWidgetItems();
@@ -1497,7 +1498,7 @@ public class ElUtils extends Plugin
 
 	public WidgetItem getInventoryWidgetItem(int id)
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
 			Collection<WidgetItem> items = getInventoryWidgetItems();
@@ -1514,7 +1515,7 @@ public class ElUtils extends Plugin
 
 	public WidgetItem getInventoryWidgetItem(Collection<Integer> ids)
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
 			Collection<WidgetItem> items = getInventoryWidgetItems();
@@ -1545,7 +1546,7 @@ public class ElUtils extends Plugin
 
 	public WidgetItem getInventoryItemMenu(ItemManager itemManager, String menuOption, int opcode, Collection<Integer> ignoreIDs)
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
 			Collection<WidgetItem> items = getInventoryWidgetItems();
@@ -1570,7 +1571,7 @@ public class ElUtils extends Plugin
 
 	public WidgetItem getInventoryItemMenu(Collection<String> menuOptions)
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
 			Collection<WidgetItem> items = getInventoryWidgetItems();
@@ -1591,7 +1592,7 @@ public class ElUtils extends Plugin
 
 	public WidgetItem getInventoryWidgetItemMenu(ItemManager itemManager, String menuOption, int opcode)
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		if (inventoryWidget != null)
 		{
 			Collection<WidgetItem> items = getInventoryWidgetItems();
@@ -1612,7 +1613,7 @@ public class ElUtils extends Plugin
 
 	public int getInventoryItemCount(int id, boolean stackable)
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		int total = 0;
 		if (inventoryWidget != null)
 		{
@@ -1634,7 +1635,7 @@ public class ElUtils extends Plugin
 
 	public int getInventoryItemStackableQuantity(int id)
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		int total = 0;
 		if (inventoryWidget != null)
 		{
@@ -1697,7 +1698,7 @@ public class ElUtils extends Plugin
 
 	public boolean inventoryItemContainsAmount(int id, int amount, boolean stackable, boolean exactAmount)
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		int total = 0;
 		if (inventoryWidget != null)
 		{
@@ -1720,7 +1721,7 @@ public class ElUtils extends Plugin
 
 	public boolean inventoryItemContainsAmount(Collection<Integer> ids, int amount, boolean stackable, boolean exactAmount)
 	{
-		Widget inventoryWidget = client.getWidget(WidgetInfo.INVENTORY);
+		Widget inventoryWidget = isBankOpen() ? client.getWidget(WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER) : isDepositBoxOpen() ? client.getWidget(WidgetInfo.DEPOSIT_BOX_INVENTORY_ITEMS_CONTAINER) : client.getWidget(WidgetInfo.INVENTORY);
 		int total = 0;
 		if (inventoryWidget != null)
 		{
@@ -2754,6 +2755,7 @@ public class ElUtils extends Plugin
 	@Subscribe
 	private void onMenuOptionClicked(MenuOptionClicked event)
 	{
+		log.debug("Before -- MenuOption={} MenuTarget={} Id={} Opcode={} Param0={} Param1={} isItemOp={} ItemOp={} ItemId={} Widget={}", event.getMenuOption(), event.getMenuTarget(), event.getId(), event.getMenuAction(), event.getParam0(), event.getParam1(), event.isItemOp(), event.getItemOp(), event.getItemId(), event.getWidget());
 		if (event.getMenuAction() == MenuAction.CC_OP && (event.getWidgetId() == WidgetInfo.WORLD_SWITCHER_LIST.getId() ||
 				event.getWidgetId() == 11927560 || event.getWidgetId() == 4522007 || event.getWidgetId() == 24772686))
 		{
@@ -2782,9 +2784,9 @@ public class ElUtils extends Plugin
 			}
 			if (modifiedMenu)
 			{
-				client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-				client.setSelectedItemSlot(modifiedItemIndex);
-				client.setSelectedItemID(modifiedItemID);
+				client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+				client.setSelectedSpellChildIndex(modifiedItemIndex);
+				client.setSelectedSpellItemId(modifiedItemID);
 				log.info("doing a Modified MOC, mod ID: {}, mod index: {}, param1: {}", modifiedItemID, modifiedItemIndex, targetMenu.getParam1());
 				menuAction(event,targetMenu.getOption(), targetMenu.getTarget(), targetMenu.getIdentifier(), modifiedOpCode,
 						targetMenu.getParam0(), targetMenu.getParam1());
@@ -2807,7 +2809,7 @@ public class ElUtils extends Plugin
 		menuOptionClicked.setMenuAction(MenuAction.of(menuAction));
 		menuOptionClicked.setActionParam(param0);
 		menuOptionClicked.setWidgetId(param1);
-		log.info(menuOptionClicked.toString());
+		log.debug("After -- MenuOption={} MenuTarget={} Id={} Opcode={} Param0={} Param1={} isItemOp={} ItemOp={} ItemId={} Widget={}", menuOptionClicked.getMenuOption(), menuOptionClicked.getMenuTarget(), menuOptionClicked.getId(), menuOptionClicked.getMenuAction(), menuOptionClicked.getParam0(), menuOptionClicked.getParam1(), menuOptionClicked.isItemOp(), menuOptionClicked.getItemOp(), menuOptionClicked.getItemId(), menuOptionClicked.getWidget());
 	}
 
 	public boolean pointIntersectIgnoringPlane(WorldPoint a, WorldPoint b){

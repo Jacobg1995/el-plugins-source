@@ -176,6 +176,11 @@ public class ElTestPlugin extends Plugin implements MouseListener, KeyListener {
 		if(!startTest){
 			return;
 		}
+		log.info("inventoryFull? " + utils.inventoryFull());
+		log.info("getInventorySpace: " + utils.getInventorySpace());
+		log.info("isBankOpen? " + utils.isBankOpen());
+		log.info("isDepositBoxOpen? " + utils.isDepositBoxOpen());
+		log.info("isItemContainerBank null? " + String.valueOf(client.getItemContainer(InventoryID.BANK)!=null));
 		if (timeout > 0)
 		{
 			timeout--;

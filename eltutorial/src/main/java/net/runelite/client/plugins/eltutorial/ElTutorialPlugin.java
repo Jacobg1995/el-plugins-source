@@ -208,13 +208,13 @@ public class ElTutorialPlugin extends Plugin
 	@Subscribe
 	private void onMenuOptionClicked(MenuOptionClicked event)
 	{
-		log.info("Before -- MenuOption={} MenuTarget={} Id={} Opcode={} Param0={} Param1={} isItemOp={} ItemOp={} ItemId={} Widget={}", event.getMenuOption(), event.getMenuTarget(), event.getId(), event.getMenuAction(), event.getParam0(), event.getParam1(), event.isItemOp(), event.getItemOp(), event.getItemId(), event.getWidget());
+		log.debug("Before -- MenuOption={} MenuTarget={} Id={} Opcode={} Param0={} Param1={} isItemOp={} ItemOp={} ItemId={} Widget={}", event.getMenuOption(), event.getMenuTarget(), event.getId(), event.getMenuAction(), event.getParam0(), event.getParam1(), event.isItemOp(), event.getItemOp(), event.getItemId(), event.getWidget());
 		if(targetMenu!=null){
 			//event.consume();
 			menuAction(event,targetMenu.getOption(),targetMenu.getTarget(),targetMenu.getIdentifier(),targetMenu.getMenuAction(),targetMenu.getParam0(),targetMenu.getParam1());
 			targetMenu=null;
 		}
-		log.info("After -- MenuOption={} MenuTarget={} Id={} Opcode={} Param0={} Param1={} isItemOp={} ItemOp={} ItemId={} Widget={}", event.getMenuOption(), event.getMenuTarget(), event.getId(), event.getMenuAction(), event.getParam0(), event.getParam1(), event.isItemOp(), event.getItemOp(), event.getItemId(), event.getWidget());
+		log.debug("After -- MenuOption={} MenuTarget={} Id={} Opcode={} Param0={} Param1={} isItemOp={} ItemOp={} ItemId={} Widget={}", event.getMenuOption(), event.getMenuTarget(), event.getId(), event.getMenuAction(), event.getParam0(), event.getParam1(), event.isItemOp(), event.getItemOp(), event.getItemId(), event.getWidget());
 	}
 
 	private long sleepDelay()

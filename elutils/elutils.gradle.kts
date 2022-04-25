@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "2.2.1"
+version = "2.2.6"
 
 project.extra["PluginName"] = "ElUtils"
 project.extra["PluginDescription"] = "El - Utils required for plugins to function with added automation"
