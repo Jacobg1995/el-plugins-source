@@ -232,8 +232,8 @@ public class ElBarbarianPlugin extends Plugin
 	{
 		targetObject = utils.findNearestGameObjectWithin(player.getWorldLocation(),10,43475);
 		if(targetObject!=null){
-			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
-			utils.setModifiedMenuEntry(targetMenu,fishId,utils.getInventoryWidgetItem(fishId).getIndex(),1);
+			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+			utils.setModifiedMenuEntry(targetMenu,fishId,utils.getInventoryWidgetItem(fishId).getIndex(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId());
 			if(targetObject.getConvexHull()!=null) {
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
 			} else {

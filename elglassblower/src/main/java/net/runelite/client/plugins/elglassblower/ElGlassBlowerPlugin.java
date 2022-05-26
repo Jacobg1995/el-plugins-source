@@ -238,14 +238,8 @@ public class ElGlassBlowerPlugin extends Plugin
 				tickTimer+=tickDelay();
 				break;
 			case "NEED_TO_BLOW":
-				if(firstTime) {
-					targetMenu = new LegacyMenuEntry("Use","Use",1785,38,utils.getInventoryWidgetItem(1785).getIndex(),9764864,false);
-					utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
-					firstTime=false;
-					tickTimer+=tickDelay();
-					break;
-				}
 				targetMenu = new LegacyMenuEntry("Use", "<col=ff9040>Glassblowing pipe<col=ffffff> -> <col=ff9040>Molten glass", 1775,31, utils.getInventoryWidgetItem(1775).getIndex(),9764864,false);
+				utils.setModifiedMenuEntry(targetMenu,1785,utils.getInventoryWidgetItem(1785).getIndex(),MenuAction.WIDGET_TARGET_ON_WIDGET.getId());
 				utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 				tickTimer+=(2+tickDelay());
 				break;

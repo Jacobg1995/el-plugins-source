@@ -225,11 +225,11 @@ public class ElCookerPlugin extends Plugin
 	{
 		targetObject = utils.findNearestGameObjectWithin(client.getLocalPlayer().getWorldLocation(),25,config.rangeObjectId());
 		if(targetObject!=null){
-			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 			if(config.seaweedMode()){
-				utils.setModifiedMenuEntry(targetMenu,21504,utils.getInventoryWidgetItem(21504).getIndex(),1);
+				utils.setModifiedMenuEntry(targetMenu,21504,utils.getInventoryWidgetItem(21504).getIndex(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId());
 			} else {
-				utils.setModifiedMenuEntry(targetMenu,config.rawFoodId(),utils.getInventoryWidgetItem(config.rawFoodId()).getIndex(),1);
+				utils.setModifiedMenuEntry(targetMenu,config.rawFoodId(),utils.getInventoryWidgetItem(config.rawFoodId()).getIndex(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId());
 			}
 			if(targetObject.getConvexHull()!=null) {
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());
@@ -245,11 +245,11 @@ public class ElCookerPlugin extends Plugin
 	{
 		targetObject = utils.findNearestGameObjectWithin(player.getWorldLocation(),25,43475);
 		if(targetObject!=null){
-			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
+			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId(),targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 			if(config.seaweedMode()){
-				utils.setModifiedMenuEntry(targetMenu,21504,utils.getInventoryWidgetItem(21504).getIndex(),1);
+				utils.setModifiedMenuEntry(targetMenu,21504,utils.getInventoryWidgetItem(21504).getIndex(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId());
 			} else {
-				utils.setModifiedMenuEntry(targetMenu,config.rawFoodId(),utils.getInventoryWidgetItem(config.rawFoodId()).getIndex(),1);
+				utils.setModifiedMenuEntry(targetMenu,config.rawFoodId(),utils.getInventoryWidgetItem(config.rawFoodId()).getIndex(),MenuAction.WIDGET_TARGET_ON_GAME_OBJECT.getId());
 			}
 			if(targetObject.getConvexHull()!=null) {
 				utils.delayMouseClick(targetObject.getConvexHull().getBounds(), sleepDelay());

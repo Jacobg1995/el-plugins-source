@@ -8,7 +8,6 @@ public enum ElFiremakerState
 	OPEN_BANK,
 	WALK_SQUARE,
 	WALK_START,
-	LIGHT_FIRST,
 	LIGHT_LOG,
 	CLOSE_BANK,
 	WITHDRAW_LOGS,

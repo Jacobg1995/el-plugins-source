@@ -57,7 +57,9 @@ class ElFiremakerOverlay extends OverlayPanel
         Duration duration = Duration.between(plugin.botTimer, Instant.now());
         timeFormat = (duration.toHours() < 1) ? "mm:ss" : "HH:mm:ss";
         tableComponent.addRow("Time:", formatDuration(duration.toMillis(), timeFormat));
-        tableComponent.addRow("State:", plugin.state.toString());
+        if(plugin.state!=null){
+            tableComponent.addRow("State:", plugin.state.toString());
+        }
         tableComponent.addRow("Path: ", String.valueOf(plugin.firemakingPath));
 
 

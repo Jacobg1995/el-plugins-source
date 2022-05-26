@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "3.1.1"
+version = "3.1.2"
 
 project.extra["PluginName"] = "El Barbarian" // This is the name that is used in the external plugin manager panel
 project.extra["PluginDescription"] = "Fishes and Cooks in Barbarian Village" // This is the description that is used in the external plugin manager panel

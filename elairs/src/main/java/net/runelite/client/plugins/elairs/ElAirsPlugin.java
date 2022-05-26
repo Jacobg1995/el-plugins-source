@@ -387,9 +387,9 @@ public class ElAirsPlugin extends Plugin
 					timeout = tickDelay();
 					break;
 				case CRAFT_TIARAS:
-					client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-					client.setSelectedItemSlot(utils.getInventoryWidgetItem(1438).getIndex());
-					client.setSelectedItemID(1438);
+					client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+					client.setSelectedSpellChildIndex(utils.getInventoryWidgetItem(1438).getIndex());
+					client.setSelectedSpellItemId(1438);
 					useGameObject(34760,1);
 					break;
 			}
@@ -469,17 +469,17 @@ public class ElAirsPlugin extends Plugin
 		menuOptionClicked.setMenuTarget(target);
 		menuOptionClicked.setId(identifier);
 		menuOptionClicked.setMenuAction(MenuAction.of(menuAction));
-		menuOptionClicked.setActionParam(param0);
-		menuOptionClicked.setWidgetId(param1);
+		menuOptionClicked.setParam0(param0);
+		menuOptionClicked.setParam1(param1);
 	}
 
 	private void useTalismanOnAltar()
 	{
 		targetObject = utils.findNearestGameObject(34813);
 		if(targetObject!=null){
-			client.setSelectedItemWidget(WidgetInfo.INVENTORY.getId());
-			client.setSelectedItemSlot(utils.getInventoryWidgetItem(1438).getIndex());
-			client.setSelectedItemID(1438);
+			client.setSelectedSpellWidget(WidgetInfo.INVENTORY.getId());
+			client.setSelectedSpellChildIndex(utils.getInventoryWidgetItem(1438).getIndex());
+			client.setSelectedSpellItemId(1438);
 			targetMenu = new LegacyMenuEntry("","",targetObject.getId(),1,targetObject.getSceneMinLocation().getX(),targetObject.getSceneMinLocation().getY(),false);
 			//utils.setMenuEntry(targetMenu);
 			if(targetObject.getConvexHull()!=null){

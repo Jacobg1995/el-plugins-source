@@ -258,16 +258,8 @@ public class ElFiremakerPlugin extends Plugin
 			return;
 		}
 		if(!utils.isBankOpen()){
-			if(firstTime){
-				targetMenu=new LegacyMenuEntry("Use","<col=ff9040>Tinderbox",590,38,utils.getInventoryWidgetItem(590).getIndex(),9764864,false);
-				utils.setMenuEntry(targetMenu);
-				utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
-				firstTime=false;
-				state=LIGHT_FIRST;
-				return;
-			}
-			targetMenu = new LegacyMenuEntry("Use","<col=ff9040>Tinderbox<col=ffffff> -> <col=ff9040>"+itemManager.getItemComposition(config.logId()).getName(),config.logId(),31,utils.getInventoryWidgetItem(config.logId()).getIndex(),9764864,false);
-			utils.setMenuEntry(targetMenu);
+			targetMenu = new LegacyMenuEntry("","",0,MenuAction.WIDGET_TARGET_ON_WIDGET.getId(),utils.getInventoryWidgetItem(config.logId()).getIndex(),9764864,false);
+			utils.setModifiedMenuEntry(targetMenu,590,utils.getInventoryWidgetItem(590).getIndex(),MenuAction.WIDGET_TARGET_ON_WIDGET.getId());
 			utils.delayMouseClick(getRandomNullPoint(),sleepDelay());
 			timeout = tickDelay();
 			state=LIGHT_LOG;
