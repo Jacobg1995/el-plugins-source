@@ -1,4 +1,4 @@
-package net.runelite.client.plugins.eltest;
+package net.runelite.client.plugins.jgfoundry;
 
 public enum ElTestState
 {

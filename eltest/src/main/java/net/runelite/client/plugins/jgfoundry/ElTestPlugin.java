@@ -1,4 +1,4 @@
-package net.runelite.client.plugins.eltest;
+package net.runelite.client.plugins.jgfoundry;
 
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.time.Instant;
 
-import static net.runelite.client.plugins.eltest.ElTestState.*;
+import static net.runelite.client.plugins.jgfoundry.ElTestState.*;
 
 @Extension
 @PluginDependency(ElUtils.class)

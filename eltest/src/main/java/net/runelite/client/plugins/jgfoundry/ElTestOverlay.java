@@ -1,4 +1,4 @@
-package net.runelite.client.plugins.eltest;
+package net.runelite.client.plugins.jgfoundry;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;

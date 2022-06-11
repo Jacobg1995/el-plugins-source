@@ -22,14 +22,14 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.client.plugins.eltest;
+package net.runelite.client.plugins.jgfoundry;
 
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.config.*;
 
-@ConfigGroup("ElTest")
+@ConfigGroup("JgFoundry")
 
-public interface ElTestConfig extends Config
+public interface JgFoundryConfig extends Config
 {
 
 	@ConfigSection(
@@ -53,19 +53,19 @@ public interface ElTestConfig extends Config
 	}
 
 	@ConfigSection(
-			keyName = "elTestTitle",
-			name = "ElTest",
+			keyName = "JgTestTitle",
+			name = "JgTest",
 			description = "",
 			position = 1
 	)
-	String elTestTitle = "elTestTitle";
+	String elTestTitle = "JgTestTitle";
 
 	@ConfigItem(
 			keyName = "X",
 			name = "X",
 			description = "WorldPoint",
 			position = 2,
-			section = "elTestTitle"
+			section = "JgTestTitle"
 	)
 	default int X()
 	{
@@ -77,7 +77,7 @@ public interface ElTestConfig extends Config
 			name = "Y",
 			description = "WorldPoint",
 			position = 3,
-			section = "elTestTitle"
+			section = "JgTestTitle"
 	)
 	default int Y()
 	{
